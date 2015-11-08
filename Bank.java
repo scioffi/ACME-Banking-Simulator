@@ -15,4 +15,7 @@ public class Bank {
         BankGUI b = new BankGUI();
     }
 
+    // bool fillFromFile(String name)
+    // Account getAccount(String id)
+
 }
