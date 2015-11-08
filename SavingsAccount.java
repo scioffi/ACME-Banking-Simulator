@@ -13,8 +13,8 @@ public class SavingsAccount extends Account implements Withdrawable {
     public static final double MINIMUM_BALANCE = 200;
     private static final double INTEREST_RATE = 0.005 / 12;
 
-    public SavingsAccount(String pin, double startingBalance) {
-        super(pin, startingBalance);
+    public SavingsAccount(String pin, double startingBalance, String id) {
+        super(pin, startingBalance, id);
     }
 
     @Override

@@ -13,8 +13,8 @@ public class CheckingAccount extends Account implements Withdrawable {
     public static final double MINIMUM_BALANCE = 50;
     private static final double INTEREST_RATE = 0;
 
-    public CheckingAccount(String pin, double startingBalance) {
-        super(pin, startingBalance);
+    public CheckingAccount(String pin, double startingBalance, String id) {
+        super(pin, startingBalance, id);
     }
 
     @Override

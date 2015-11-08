@@ -3,26 +3,32 @@
 */
 
 public abstract class Account {
-    private String id;
-    private String pin;
+    private final String id;
+    private final String pin;
     private double balance;
 
     /**
      * If the PIN is invalid, it is set to 0000
-     * @param pin The pin number for this account
+     * @param pin The pin number string for this account
+     * @param startingBalance The initial balance of this account
+     * @param id This account's id number string
      * @throws IllegalArgumentException if the starting balance is negative
      */
-    public Account(String pin, double startingBalance) throws IllegalArgumentException {
+    public Account(String pin, double startingBalance, String id) throws IllegalArgumentException {
         if (!isValidPIN(pin)) {
-            pin = "0000";
+            this.pin = "0000";
             throw new IllegalArgumentException("Bad PIN format");
         }
-        this.id = "0001";
+        this.pin = pin;
+        if (!isValidID(id)) {
+            this.id = "0000000000";
+            throw new IllegalArgumentException("Bad account number format");
+        }
+        this.id = id;
         if (startingBalance < 0) {
             this.balance = 0;
             throw new IllegalArgumentException("Cannot open account with negative balance.");
         }
-
         this.balance = startingBalance;
     }
 
@@ -62,6 +68,8 @@ public abstract class Account {
         return balance;
     }
 
+
+
     public synchronized void deposit(double amt) {
         if (amt <= 0)
             return;
@@ -80,7 +88,7 @@ public abstract class Account {
     }
 
     public static boolean isValidID(String n) {
-        if (n.length() < 4)
+        if (n.length() != 10)
             return false;
         for (int i = 0; i < 4; i++) {
             if (!Character.isDigit(n.charAt(i))) {
@@ -88,5 +96,14 @@ public abstract class Account {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || !(other instanceof Account)) {
+            return false;
+        }
+        Account rhs = (Account)other;
+        return rhs.getID().equals(this.getID());
     }
 }
