@@ -1,4 +1,4 @@
-/* CheckingAccount.java
+/* SavingsAccount.java
  * Version:
  *  $Id$
  * Revision:
@@ -8,12 +8,12 @@
 /**
  * @author Michael Incardona mji8299
  */
-public class CheckingAccount extends Account implements Withdrawable {
+public class SavingsAccount extends Account implements Withdrawable {
 
-    public static final double MINIMUM_BALANCE = 50;
-    private static final double INTEREST_RATE = 0;
+    public static final double MINIMUM_BALANCE = 200;
+    private static final double INTEREST_RATE = 0.005 / 12;
 
-    public CheckingAccount(String pin, double startingBalance) {
+    public SavingsAccount(String pin, double startingBalance) {
         super(pin, startingBalance);
     }
 
@@ -24,14 +24,15 @@ public class CheckingAccount extends Account implements Withdrawable {
 
     @Override
     public synchronized double getMonthlyPenalty() {
-        if (this.getBalance() > 5.0)
-            return 5.0;
-        else
-            return getBalance() * 0.1;
+        if (getBalance() > 10)
+            return 10;
+        return 0.1 * this.getBalance();
     }
 
     @Override
     public synchronized double getInterestRate() {
+        if (getBalance() < getMinimumBalance())
+            return 0;
         return INTEREST_RATE;
     }
 
