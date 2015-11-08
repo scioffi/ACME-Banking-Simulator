@@ -6,9 +6,14 @@
  */
 
 /**
- * Created by Michael on 2015-11-08.
+ * @author Michael Incardona mji8299
  */
 public class CheckingAccount extends Account implements Withdrawable {
+
+
+    public CheckingAccount(String pin) {
+        super(pin);
+    }
 
     @Override
     public double getMinimumBalance() {
