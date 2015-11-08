@@ -7,7 +7,8 @@ public abstract class Account {
     private String pin;
     private double balance;
 
-    public Account() {
+    public Account(String pin) {
+
         balance = 0.0;
     }
 
@@ -30,4 +31,8 @@ public abstract class Account {
     }
 
     public abstract void deposit(double amt);
+
+    public static boolean isValidPIN(String n) {
+        for (
+    }
 }
