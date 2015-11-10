@@ -3,7 +3,7 @@ import java.util.SortedSet;
 /**
  * Represents a logical Bank.
  * @author Michael Incardona mji8299
- * @author Steven Cioffi
+ * @author Stephen Cioffi scc3459
  */
 public class Bank {
 
@@ -11,8 +11,11 @@ public class Bank {
     private SortedSet<Account> accounts;
 
     public static void main(String[] args) {
-        System.out.println("hello world");
-        BankGUI b = new BankGUI();
+        new Runnable() {
+            public void run() {
+                BankGUI b = new BankGUI();
+            }
+        };
     }
 
     // bool fillFromFile(String name)

@@ -1,5 +1,8 @@
 /**
-    BankGUI.java
+ *  BankGUI.java
+ *
+ *  @author Michael Incardona mji8299
+ *  @author Stephen Cioffi scc3459
  */
 
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -19,7 +22,7 @@ import java.util.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class BankGUI extends JFrame {
+public class BankGUI extends JFrame{
     public BankGUI() {
         this.setTitle("BankGUI");
         this.setSize(700,500);
@@ -34,22 +37,16 @@ public class BankGUI extends JFrame {
         content.setPreferredSize(new Dimension(450,500));
         content.setBackground(Color.green);
 
-        sidebar.setPreferredSize(new Dimension(250,450));
+        sidebar.setPreferredSize(new Dimension(250,400));
         sidebar.setBackground(Color.red);
 
-        //topSidebar.setPreferredSize(new Dimension(250,50));
+        JPanel bottom = new JPanel();
+        bottom.setPreferredSize(new Dimension(250,100));
+        bottom.setBounds(250,400,250,100);
+        bottom.setLayout(new GridLayout(1,2));
 
         GridLayout grid = new GridLayout(4,3);
         sidebar.setLayout(grid);
-
-        //JLabel top = new JLabel("FREE ATM");
-        //top.setFont(new Font("serif",Font.BOLD,100));
-
-        //topSidebar.add(top);
-
-        for(int i = 9; i <= 0;i++){
-            sidebar.add(new JButton("" + i));
-        }
 
         JButton butt0 = new JButton("0");
         JButton butt1 = new JButton("1");
@@ -64,6 +61,8 @@ public class BankGUI extends JFrame {
 
         JButton buttok = new JButton("OK");
         JButton buttcancel = new JButton("Cancel");
+        JButton buttclear = new JButton("Clear");
+        JButton buttclose = new JButton("Close");
 
         sidebar.add(butt0);
         sidebar.add(butt1);
@@ -78,6 +77,8 @@ public class BankGUI extends JFrame {
 
         sidebar.add(buttok);
         sidebar.add(buttcancel);
+        bottom.add(buttclear);
+        bottom.add(buttclose);
 
         Font numberFont = new Font("sans-serif",Font.BOLD,50);
 
@@ -93,10 +94,12 @@ public class BankGUI extends JFrame {
         butt0.setFont(numberFont);
         buttok.setFont(new Font("sans-serif",Font.BOLD,30));
         buttcancel.setFont(new Font("sans-serif",Font.BOLD,12));
+        buttclear.setFont(new Font("sans-serif",Font.BOLD,16));
+        buttclose.setFont(new Font("sans-serif",Font.BOLD,16));
 
-        //this.add(topSidebar);
         this.add(content);
         this.add(sidebar);
+        this.add(bottom);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
