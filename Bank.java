@@ -11,11 +11,7 @@ public class Bank {
     private SortedSet<Account> accounts;
 
     public static void main(String[] args) {
-        new Runnable() {
-            public void run() {
-                BankGUI b = new BankGUI();
-            }
-        };
+        BankGUI bank = new BankGUI();
     }
 
     // bool fillFromFile(String name)
