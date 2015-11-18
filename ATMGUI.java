@@ -1,5 +1,5 @@
-/**
-    ATMGUI.java
+/*
+ *  ATMGUI.java
  */
 
 import javax.swing.*;
