@@ -1,3 +1,4 @@
+import java.util.Observable;
 import java.util.SortedSet;
 
 /**
@@ -5,7 +6,7 @@ import java.util.SortedSet;
  * @author Michael Incardona mji8299
  * @author Stephen Cioffi scc3459
  */
-public class Bank {
+public class Bank extends Observable {
 
     // construct by passing in a comparator that compares account numbers
     private SortedSet<Account> accounts;

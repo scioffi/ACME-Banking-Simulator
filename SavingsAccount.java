@@ -14,7 +14,7 @@ public class SavingsAccount extends Account implements Withdrawable {
     }
 
     @Override
-    public synchronized double getMinimumBalance() {
+    public double getMinimumBalance() {
         return MINIMUM_BALANCE;
     }
 
