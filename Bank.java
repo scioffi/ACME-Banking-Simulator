@@ -1,5 +1,5 @@
+import java.util.ArrayList;
 import java.util.Observable;
-import java.util.SortedSet;
 
 /**
  * Represents a logical Bank.
@@ -8,10 +8,20 @@ import java.util.SortedSet;
  */
 public class Bank extends Observable {
 
-    // construct by passing in a comparator that compares account numbers
-    private SortedSet<Account> accounts;
+    private ArrayList<Account> accounts;
 
+    // bankfile format:
+    // one account per line: <id> <type> <pin> <balance>
+    // <type> is CHK, SAV, or COD
     public Bank(String bankFile, String batchFile) {
+        accounts = new ArrayList<>();
+        fillFromFile(bankFile);
+        if (batchFile != null) {
+            batchProcess(batchFile);
+        }
+    }
+    
+    public void batchProcess(String batchFile) {
         
     }
     
@@ -20,19 +30,27 @@ public class Bank extends Observable {
             System.err.println("Usage: java Bank bankFile [batchFile]");
             return;
         }
-        String bankFile = args[0];
-        String batchFile;
-        if (args.length == 2)
-            batchFile = args[1];
-        else
-            batchFile = null;
         
-        Bank bankModel = new Bank(bankFile, batchFile);
-        
-        BankGUI bGUI = new BankGUI(bankModel);
+        if (args.length == 2) {
+            Bank bankModel = new Bank(args[0], args[1]);
+        } else {
+            Bank bankModel = new Bank(args[1], null);
+            BankGUI bGUI = new BankGUI(bankModel);
+        }
     }
 
-    // bool fillFromFile(String name)
-    // Account getAccount(String id)
-
+    boolean fillFromFile(String name) {
+        
+        return true;
+    }
+    
+    Account getAccount(String id) {
+        for (Account a : accounts) {
+            if (a.getID().equals(id)) {
+                return a;
+            }
+        }
+        return null;
+    }
+    
 }
