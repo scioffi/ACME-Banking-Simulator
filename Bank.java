@@ -10,9 +10,11 @@ public class Bank extends Observable {
 
     private ArrayList<Account> accounts;
 
-    // bankfile format:
-    // one account per line: <id> <type> <pin> <balance>
-    // <type> is CHK, SAV, or COD
+    /*
+     * bankfile format:
+     *      one account per line: <id> <type> <pin> <balance>
+     *      <type> is CHK, SAV, or COD
+     */
     public Bank(String bankFile, String batchFile) {
         accounts = new ArrayList<>();
         fillFromFile(bankFile);
@@ -20,7 +22,11 @@ public class Bank extends Observable {
             batchProcess(batchFile);
         }
     }
-    
+
+    /**
+     * Executes a batch of commands on this Bank.
+     * @param batchFile File containing the instructions to execute
+     */
     public void batchProcess(String batchFile) {
         
     }
@@ -39,6 +45,12 @@ public class Bank extends Observable {
         }
     }
 
+    /**
+     * Extracts account information from a file and adds it to this Bank.
+     * This method skips accounts which are incorrectly specified in the file, but will return false in that case.
+     * @param name The name/path of a file containing account information
+     * @return true if all accounts were added successfully; false if there was some sort of error.
+     */
     boolean fillFromFile(String name) {
         
         return true;
