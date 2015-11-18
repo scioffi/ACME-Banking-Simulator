@@ -1,5 +1,5 @@
-/**
- ATM.java
+/*
+ * ATM.java
  */
 
 public class ATM {

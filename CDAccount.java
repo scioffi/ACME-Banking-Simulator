@@ -1,8 +1,4 @@
 /* CDAccount.java
- * Version:
- *  $Id$
- * Revision:
- *  $Log$
  */
 
 /**
@@ -28,7 +24,7 @@ public class CDAccount extends Account {
 
     @Override
     public double getMonthlyPenalty() {
-        return 0;
+        return Account.ZERO;
     }
 
     @Override

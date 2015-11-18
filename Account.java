@@ -1,8 +1,11 @@
-/**
+/*
  * Account.java
-*/
+ */
 
 public abstract class Account {
+    
+    public static final double ZERO = 0;
+    
     private final String id;
     private final String pin;
     private double balance;
@@ -17,6 +20,7 @@ public abstract class Account {
     public Account(String pin, double startingBalance, String id) throws IllegalArgumentException {
         if (!isValidPIN(pin)) {
             this.pin = "0000";
+            this.id = "0000000000";
             throw new IllegalArgumentException("Bad PIN format");
         }
         this.pin = pin;

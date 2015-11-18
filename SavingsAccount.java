@@ -1,8 +1,4 @@
 /* SavingsAccount.java
- * Version:
- *  $Id$
- * Revision:
- *  $Log$
  */
 
 /**
@@ -32,14 +28,15 @@ public class SavingsAccount extends Account implements Withdrawable {
     @Override
     public synchronized double getInterestRate() {
         if (getBalance() < getMinimumBalance())
-            return 0;
+            return Account.ZERO;
         return INTEREST_RATE;
     }
 
     @Override
     public synchronized void withdraw(double amt) {
-        if (amt <= 0 || amt > this.getBalance())
+        if (amt <= Account.ZERO || amt > this.getBalance())
             return;
         this.setBalance(this.getBalance() - amt);
     }
+
 }
