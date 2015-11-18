@@ -26,7 +26,7 @@ import javafx.scene.media.MediaPlayer;
 public class BankGUI extends JFrame{
     private String activeWindow = "Home";
 
-    public BankGUI() {
+    public BankGUI(Bank bank) {
         this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM #");
         this.setSize(700,500);
         //this.setLayout(new BorderLayout());
