@@ -27,9 +27,9 @@ public class BankGUI extends JFrame{
     private String activeWindow = "Home";
 
     public BankGUI() {
-        this.setTitle("BankGUI");
+        this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM #");
         this.setSize(700,500);
-        this.setLayout(new BorderLayout());
+        //this.setLayout(new BorderLayout());
 
         JPanel sidebar = new JPanel();
         JPanel content = new JPanel();
@@ -41,6 +41,9 @@ public class BankGUI extends JFrame{
         content.setPreferredSize(new Dimension(450,500));
         //content.setBackground(Color.green);
         content.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        BoxLayout box = new BoxLayout(content,BoxLayout.Y_AXIS);
+        content.setLayout(box);
 
         sidebar.setPreferredSize(new Dimension(250,500));
         //sidebar.setBackground(Color.red);
@@ -83,9 +86,11 @@ public class BankGUI extends JFrame{
         sidebar.add(buttclose);
 
         Font numberFont = new Font("sans-serif",Font.BOLD,50);
+            /*
         Border compound;
         Border raisedbevel = BorderFactory.createRaisedBevelBorder();
         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+            */
 
         butt1.setFont(numberFont);
         butt2.setFont(numberFont);
@@ -98,8 +103,8 @@ public class BankGUI extends JFrame{
         butt9.setFont(numberFont);
         butt0.setFont(numberFont);
         buttok.setFont(new Font("sans-serif",Font.BOLD,30));
-            buttok.setBackground(Color.green);
-            buttok.setBorder(compound = BorderFactory.createCompoundBorder(raisedbevel,loweredbevel));
+            //buttok.setBackground(Color.green);
+            //buttok.setBorder(compound = BorderFactory.createCompoundBorder(raisedbevel,loweredbevel));
         buttcancel.setFont(new Font("sans-serif",Font.BOLD,12));
         buttclear.setFont(new Font("sans-serif",Font.BOLD,16));
         buttclose.setFont(new Font("sans-serif",Font.BOLD,16));

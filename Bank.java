@@ -11,8 +11,13 @@ public class Bank extends Observable {
     // construct by passing in a comparator that compares account numbers
     private SortedSet<Account> accounts;
 
-    public static void main(String[] args) {
-        BankGUI bank = new BankGUI();
+    public static void main(String[] args){
+        new Runnable(){
+            @Override
+            public void run() {
+                new BankGUI();
+            }
+        };
     }
 
     // bool fillFromFile(String name)
