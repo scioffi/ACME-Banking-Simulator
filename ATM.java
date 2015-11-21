@@ -3,9 +3,9 @@
  */
 
 import java.util.Observable;
-import java.io.*;
+import java.util.Observer;
 
-public class ATM extends Observable {
+public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
 
@@ -27,11 +27,31 @@ public class ATM extends Observable {
         }
         else{
             account = a;
+
             return true;
         }
     }
 
+    public boolean validatePIN(String pin){
+        if(account.matchesPIN(pin)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void close(){
+        this.deleteObservers();
+        account.deleteObserver(this);
+    }
+
     public static void main(String[] args){
         new ATM(new Bank("test.txt",null));
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        o.notifyObservers();
     }
 }

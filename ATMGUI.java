@@ -23,18 +23,26 @@ import java.util.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class ATMGUI extends JFrame{
-    private String activeWindow = "Home";
+public class ATMGUI extends JFrame implements Observer{
+    private String activeWindow = "login1";
+    private ATM atm;
+    private long id;
     private JLabel mainlabel;
     private JPasswordField pass;
 
+    private JPanel content;
+    private JPanel sidebar;
+
     public ATMGUI(ATM atm,long ATMID) {
+        this.atm = atm;
+        this.id = ATMID;
+
         this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM #" + ATMID);
         this.setSize(700,500);
         //this.setLayout(new BorderLayout());
 
-        JPanel sidebar = new JPanel();
-        JPanel content = new JPanel();
+        this.sidebar = new JPanel();
+        this.content = new JPanel();
 
         FlowLayout flow = new FlowLayout();
 
@@ -107,7 +115,7 @@ public class ATMGUI extends JFrame{
         buttok.setFont(new Font("sans-serif",Font.BOLD,30));
         //buttok.setBackground(Color.green);
         //buttok.setBorder(compound = BorderFactory.createCompoundBorder(raisedbevel,loweredbevel));
-        buttcancel.setFont(new Font("sans-serif",Font.BOLD,12));
+        buttcancel.setFont(new Font("sans-serif",Font.BOLD,14));
         buttclear.setFont(new Font("sans-serif",Font.BOLD,16));
         buttclose.setFont(new Font("sans-serif",Font.BOLD,16));
 
@@ -162,6 +170,14 @@ public class ATMGUI extends JFrame{
                             changeWindow("login2");
                         }
                         break;
+                    case "login2":
+                        if(atm.validatePIN(new String(pass.getPassword()))){
+                            changeWindow("home");
+                        }
+                        else{
+                            changeWindow("login1");
+                        }
+                        break;
                 }
                 buttonPressed("OK");
             }
@@ -169,12 +185,23 @@ public class ATMGUI extends JFrame{
         buttcancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                switch(activeWindow){
+                    case "login2":
+                        changeWindow("login1");
+                        break;
+                }
                 buttonPressed("CANCEL");
             }
         });
         buttclear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                switch(activeWindow){
+                    case "login1":
+                    case "login2":
+                        pass.setText("");
+                        break;
+                }
                 buttonPressed("CLEAR");
             }
         });
@@ -186,10 +213,6 @@ public class ATMGUI extends JFrame{
         });
     }
 
-    private void buttonPressed(int num){
-
-        System.out.println(num);
-    }
     private void buttonPressed(String str){
         switch(str){
             case "OK":
@@ -203,6 +226,8 @@ public class ATMGUI extends JFrame{
                 break;
             case "CLOSE":
                 System.out.println(str);
+                atm.deleteObservers();
+                atm.close();
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
                 break;
         }
@@ -211,10 +236,22 @@ public class ATMGUI extends JFrame{
     private void changeWindow(String window){
         activeWindow = window;
         switch(activeWindow){
+            case "login1":
+                mainlabel.setText("Please enter your account ID:");
+                pass.setText("");
+                break;
             case "login2":
                 mainlabel.setText("Please enter your PIN:");
                 pass.setText("");
                 break;
+            case "home":
+
+                break;
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }
