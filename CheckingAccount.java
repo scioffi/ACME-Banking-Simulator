@@ -38,4 +38,9 @@ public class CheckingAccount extends Account implements Withdrawable {
         this.setBalance(this.getBalance() - amt);
         triggerUpdate();
     }
+    
+    @Override
+    public synchronized String toString() {
+        return "Checking account #" + getID() + " has balance " + formatCash(getBalance());
+    }
 }

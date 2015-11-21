@@ -39,5 +39,10 @@ public class SavingsAccount extends Account implements Withdrawable {
         this.setBalance(this.getBalance() - amt);
         triggerUpdate();
     }
+    
+    @Override
+    public synchronized String toString() {
+        return "Savings account #" + getID() + " has balance " + formatCash(getBalance());
+    }
 
 }

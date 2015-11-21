@@ -32,4 +32,9 @@ public class CDAccount extends Account {
         return INTEREST_RATE;
     }
 
+    @Override
+    public synchronized String toString() {
+        return "Certificate of deposit account #" + getID() + " has balance " + formatCash(getBalance());
+    }
+    
 }

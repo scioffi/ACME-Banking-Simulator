@@ -9,48 +9,49 @@ public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
 
-    public ATM(Bank b){
+    public ATM(Bank b) {
         bank = b;
-        ATM atm = this;
-
-        new Thread(){
-            public void run() {
-                new ATMGUI(atm, Thread.currentThread().getId());
-            }
-        }.start();
     }
 
-    public boolean validateID(String id){
+    public boolean validateID(String id) {
         Account a = bank.getAccount(id);
-        if(a == null) {
+        if (a == null) {
             return false;
-        }
-        else{
+        } else {
+            close();
             account = a;
+            a.addObserver(this);
             return true;
         }
     }
 
-    public boolean validatePIN(String pin){
-        if (account.matchesPIN(pin)) {
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean validatePIN(String pin) {
+        return account.matchesPIN(pin);
     }
 
-    public void close(){
+    public void closeAll() {
         this.deleteObservers();
-        account.deleteObserver(this);
+        close();
     }
 
-    public static void main(String[] args){
+    public void close() {
+        if (account == null)
+            return;
+        account.deleteObserver(this);
+        account = null;
+    }
+    
+    private void triggerUpdate() {
+        this.setChanged();
+        this.notifyObservers();
+    }
+    
+    public static void main(String[] args) {
         new ATM(new Bank("test.txt", null));
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        o.notifyObservers();
+        triggerUpdate();
     }
 }

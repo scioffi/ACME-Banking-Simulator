@@ -46,7 +46,7 @@ public class Bank extends Observable implements Observer {
         if (args.length == 2) {
             Bank bankModel = new Bank(args[0], args[1]);
         } else {
-            Bank bankModel = new Bank(args[1], null);
+            Bank bankModel = new Bank(args[0], null);
             BankGUI bGUI = new BankGUI(bankModel);
             bankModel.notifyObservers(null);
         }

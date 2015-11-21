@@ -2,11 +2,14 @@
  * Account.java
  */
 
+import java.text.DecimalFormat;
 import java.util.Observable;
 
 public abstract class Account extends Observable {
     
     public static final double ZERO = 0;
+    
+    private static DecimalFormat df = new DecimalFormat("$#.00");
     
     private final String id;
     private final String pin;
@@ -37,7 +40,11 @@ public abstract class Account extends Observable {
         }
         this.balance = startingBalance;
     }
-
+    
+    public static String formatCash(double f) {
+        return df.format(f);
+    }
+    
     public abstract double getMinimumBalance();
 
     /**
@@ -116,4 +123,10 @@ public abstract class Account extends Observable {
         setChanged();
         notifyObservers();
     }
+    
+    @Override
+    public String toString() {
+        return "Account #" + getID() + " has balance " + formatCash(getBalance());
+    }
+    
 }

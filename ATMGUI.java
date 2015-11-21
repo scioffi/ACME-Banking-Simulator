@@ -26,11 +26,25 @@ public class ATMGUI extends JFrame implements Observer{
 
     private JButton[] numberBtns;
     
-    public ATMGUI(ATM atm,long ATMID) {
+    public ATMGUI(ATM atm, long ATMID) {
+
+        // try to make the window match the look of the current platform
+        try {
+            // Set System L&F
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException |
+                IllegalAccessException |
+                ClassNotFoundException |
+                InstantiationException e) {
+            // handle exception
+            // do nothing
+        }
+        
         this.atm = atm;
         this.id = ATMID;
 
-        this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM #" + ATMID);
+        this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM ID: " + ATMID);
         this.setSize(700, 500);
         //this.setLayout(new BorderLayout());
 
@@ -63,7 +77,6 @@ public class ATMGUI extends JFrame implements Observer{
         JButton buttok = new JButton("OK");
         JButton buttcancel = new JButton("Cancel");
         JButton buttclear = new JButton("Clear");
-        JButton dud = new JButton();
         JButton buttclose = new JButton("Close");
 
         for (int i = 1; i < 10; i++) {
@@ -73,7 +86,7 @@ public class ATMGUI extends JFrame implements Observer{
         sidebar.add(numberBtns[0]);
         sidebar.add(buttcancel);
         sidebar.add(buttclear);
-        sidebar.add(dud);
+        sidebar.add(new JPanel());
         sidebar.add(buttclose);
 
         Font numberFont = new Font("sans-serif", Font.BOLD, 50);
@@ -109,7 +122,7 @@ public class ATMGUI extends JFrame implements Observer{
         loginscreen.add(mainlabel);
         loginscreen.add(pass);
 
-        activeWindow="login1";
+        activeWindow = "login1";
 
         this.add(loginscreen,BorderLayout.WEST);
         this.add(sidebar,BorderLayout.EAST);
@@ -134,15 +147,14 @@ public class ATMGUI extends JFrame implements Observer{
             public void actionPerformed(ActionEvent e) {
                 switch(activeWindow){
                     case "login1":
-                        if(atm.validateID(new String(pass.getPassword()))) {
+                        if (atm.validateID(new String(pass.getPassword()))) {
                             changeWindow("login2");
                         }
                         break;
                     case "login2":
-                        if(atm.validatePIN(new String(pass.getPassword()))){
+                        if (atm.validatePIN(new String(pass.getPassword()))){
                             changeWindow("home");
-                        }
-                        else{
+                        } else {
                             changeWindow("login1");
                         }
                         break;
@@ -181,7 +193,7 @@ public class ATMGUI extends JFrame implements Observer{
         });
     }
 
-    private void buttonPressed(String str){
+    private void buttonPressed(String str) {
         switch(str) {
             case "OK":
                 System.out.println(str);
@@ -195,14 +207,14 @@ public class ATMGUI extends JFrame implements Observer{
             case "CLOSE":
                 System.out.println(str);
                 atm.deleteObservers();  // remove dangling references to observer objects for garbage collection
-                atm.close();
+                atm.closeAll();
                 atm = null;
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
                 break;
         }
     }
 
-    private void changeWindow(String window){
+    private void changeWindow(String window) {
         activeWindow = window;
         switch(activeWindow) {
             case "login1":
@@ -217,7 +229,6 @@ public class ATMGUI extends JFrame implements Observer{
                 loginscreen.removeAll();
                 this.homescreen = new JPanel();
                 homescreen.setLayout(new FlowLayout());
-                
                 break;
         }
     }
