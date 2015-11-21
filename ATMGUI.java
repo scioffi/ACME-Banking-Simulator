@@ -27,7 +27,7 @@ public class ATMGUI extends JFrame implements Observer{
     private JButton[] numberBtns;
     
     public ATMGUI(ATM atm, long ATMID) {
-
+        
         // try to make the window match the look of the current platform
         try {
             // Set System L&F
@@ -103,20 +103,21 @@ public class ATMGUI extends JFrame implements Observer{
         buttok.setFont(new Font("sans-serif", Font.BOLD,30));
         //buttok.setBackground(Color.green);
         //buttok.setBorder(compound = BorderFactory.createCompoundBorder(raisedbevel,loweredbevel));
-        buttcancel.setFont(new Font("sans-serif", Font.BOLD,14));
-        buttclear.setFont(new Font("sans-serif", Font.BOLD,16));
-        buttclose.setFont(new Font("sans-serif", Font.BOLD,16));
+        buttcancel.setFont(new Font("sans-serif", Font.BOLD, 14));
+        buttclear.setFont(new Font("sans-serif", Font.BOLD, 16));
+        buttclose.setFont(new Font("sans-serif", Font.BOLD, 16));
 
         JLabel mainlabel = new JLabel("Please enter your account ID:");
-            mainlabel.setPreferredSize(new Dimension(430,70));
-            mainlabel.setFont(new Font("sans-serif",Font.BOLD,30));
+            mainlabel.setPreferredSize(new Dimension(430, 70));
+            mainlabel.setFont(new Font("sans-serif", Font.BOLD, 30));
             this.mainlabel = mainlabel;
-        JPasswordField pass = new JPasswordField(6);
+        // NOTE: for some reason, you need to add one to the JPasswordField arg to display all characters properly.
+        JPasswordField pass = new JPasswordField(7);
             pass.setEditable(false);
-            pass.setPreferredSize(new Dimension(300,70));
-            pass.setSize(300,70);
-            pass.setBounds(0,200,300,70);
-            pass.setFont(new Font("sans-serif",Font.BOLD,30));
+            pass.setPreferredSize(new Dimension(300, 70));
+            pass.setSize(300, 70);
+            pass.setBounds(0, 200, 300, 70);
+            pass.setFont(new Font("sans-serif", Font.BOLD, 30));
             this.pass = pass;
 
         loginscreen.add(mainlabel);
