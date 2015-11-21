@@ -19,7 +19,7 @@ public class Bank extends Observable {
     
     private String bankFile;
     
-    private Bank(String bankFile, String batchFile) {
+    public Bank(String bankFile, String batchFile) {
         this.bankFile = bankFile;
         accounts = new ArrayList<>();
         fillFromFile(bankFile);
