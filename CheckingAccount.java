@@ -36,5 +36,6 @@ public class CheckingAccount extends Account implements Withdrawable {
         if (amt <= 0 || amt > this.getBalance())
             return;
         this.setBalance(this.getBalance() - amt);
+        triggerUpdate();
     }
 }

@@ -37,6 +37,7 @@ public class SavingsAccount extends Account implements Withdrawable {
         if (amt <= Account.ZERO || amt > this.getBalance())
             return;
         this.setBalance(this.getBalance() - amt);
+        triggerUpdate();
     }
 
 }

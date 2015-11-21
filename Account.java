@@ -2,7 +2,9 @@
  * Account.java
  */
 
-public abstract class Account {
+import java.util.Observable;
+
+public abstract class Account extends Observable {
     
     public static final double ZERO = 0;
     
@@ -76,6 +78,7 @@ public abstract class Account {
         if (amt <= 0)
             return;
         this.setBalance(this.getBalance() + amt);
+        triggerUpdate();
     }
 
     public static boolean isValidPIN(String n) {
@@ -107,5 +110,10 @@ public abstract class Account {
         }
         Account rhs = (Account)other;
         return rhs.getID().equals(this.getID());
+    }
+
+    protected void triggerUpdate() {
+        setChanged();
+        notifyObservers();
     }
 }
