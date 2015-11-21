@@ -10,12 +10,14 @@ public class Bank extends Observable {
 
     private ArrayList<Account> accounts;
 
+    private final static String 
+    
     /*
      * bankfile format:
      *      one account per line: <id> <type> <pin> <balance>
      *      <type> is CHK, SAV, or COD
      */
-    public Bank(String bankFile, String batchFile) {
+    private Bank(String bankFile, String batchFile) {
         accounts = new ArrayList<>();
         fillFromFile(bankFile);
         if (batchFile != null) {
@@ -27,7 +29,7 @@ public class Bank extends Observable {
      * Executes a batch of commands on this Bank.
      * @param batchFile File containing the instructions to execute
      */
-    public void batchProcess(String batchFile) {
+    private void batchProcess(String batchFile) {
         
     }
     
@@ -51,12 +53,12 @@ public class Bank extends Observable {
      * @param name The name/path of a file containing account information
      * @return true if all accounts were added successfully; false if there was some sort of error.
      */
-    boolean fillFromFile(String name) {
+    private boolean fillFromFile(String name) {
         
         return true;
     }
     
-    Account getAccount(String id) {
+    public Account getAccount(String id) {
         for (Account a : accounts) {
             if (a.getID().equals(id)) {
                 return a;
@@ -65,4 +67,17 @@ public class Bank extends Observable {
         return null;
     }
     
+    public ArrayList<Account> getAccounts() {
+        return accounts;
+    }
+    
+    private void triggerUpdate() {
+        setChanged();
+        notifyObservers();
+    }
+    
+    private boolean addAccount(String type) {
+        if (type == "
+    }
+            
 }

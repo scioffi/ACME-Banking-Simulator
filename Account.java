@@ -20,12 +20,12 @@ public abstract class Account {
     public Account(String pin, double startingBalance, String id) throws IllegalArgumentException {
         if (!isValidPIN(pin)) {
             this.pin = "0000";
-            this.id = "0000000000";
+            this.id = "000000";
             throw new IllegalArgumentException("Bad PIN format");
         }
         this.pin = pin;
         if (!isValidID(id)) {
-            this.id = "0000000000";
+            this.id = "000000";
             throw new IllegalArgumentException("Bad account number format");
         }
         this.id = id;
