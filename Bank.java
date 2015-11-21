@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Scanner;
  * @author Michael Incardona mji8299
  * @author Stephen Cioffi scc3459
  */
-public class Bank extends Observable {
+public class Bank extends Observable implements Observer {
 
     private ArrayList<Account> accounts;
 
@@ -111,20 +112,31 @@ public class Bank extends Observable {
     private boolean addAccount(String type, String id, String pin, double balance) {
         Account act;
         try {
-            if (type.equals(ACCOUNT_CHECKING_STRING)) {
+            // try to create a new account of the appropriate type
+            switch (type) {
+            case ACCOUNT_CHECKING_STRING:
                 act = new CheckingAccount(id, pin, balance);
-            } else if (type.equals(ACCOUNT_SAVING_STRING)) {
+                break;
+            case ACCOUNT_SAVING_STRING:
                 act = new SavingsAccount(id, pin, balance);
-            } else if (type.equals(ACCOUNT_CD_STRING)) {
+                break;
+            case ACCOUNT_CD_STRING:
                 act = new CDAccount(id, pin, balance);
-            } else {
+                break;
+            default:
                 return false;
             }
+            // add the new account
             accounts.add(act);
+            act.addObserver(this);
         } catch (IllegalArgumentException e) {
             return false;
         }
         return true;
     }
-            
+
+    @Override
+    public void update(Observable o, Object arg) {
+        triggerUpdate();
+    }
 }

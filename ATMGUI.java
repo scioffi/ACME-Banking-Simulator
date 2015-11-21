@@ -23,7 +23,7 @@ import java.util.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class ATMGUI extends JFrame{
+public class ATMGUI extends JFrame {
     private String activeWindow = "Home";
     private JLabel mainlabel;
     private JPasswordField pass;
