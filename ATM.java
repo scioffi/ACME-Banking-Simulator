@@ -24,8 +24,7 @@ public class ATM extends Observable implements Observer {
         Account a = bank.getAccount(id);
         if(a == null){
             return false;
-        }
-        else{
+        } else {
             account = a;
             return true;
         }
