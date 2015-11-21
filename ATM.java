@@ -14,15 +14,15 @@ public class ATM extends Observable implements Observer {
         ATM atm = this;
 
         new Thread(){
-            public void run(){
-                new ATMGUI(atm,Thread.currentThread().getId());
+            public void run() {
+                new ATMGUI(atm, Thread.currentThread().getId());
             }
         }.start();
     }
 
     public boolean validateID(String id){
         Account a = bank.getAccount(id);
-        if(a == null){
+        if(a == null) {
             return false;
         }
         else{
@@ -32,7 +32,7 @@ public class ATM extends Observable implements Observer {
     }
 
     public boolean validatePIN(String pin){
-        if(account.matchesPIN(pin)){
+        if (account.matchesPIN(pin)) {
             return true;
         }
         else{
@@ -46,7 +46,7 @@ public class ATM extends Observable implements Observer {
     }
 
     public static void main(String[] args){
-        new ATM(new Bank("test.txt",null));
+        new ATM(new Bank("test.txt", null));
     }
 
     @Override
