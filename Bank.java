@@ -23,7 +23,7 @@ public class Bank extends Observable implements Observer {
     public Bank(String bankFile, String batchFile) {
         this.bankFile = bankFile;
         accounts = new ArrayList<>();
-        fillFromFile(bankFile);
+        fillFromFile();
         if (batchFile != null) {
             batchProcess(batchFile);
         }
@@ -53,12 +53,11 @@ public class Bank extends Observable implements Observer {
     }
 
     /**
-     * Extracts account information from a file and adds it to this Bank.
+     * Extracts account information from the bank file and adds it to this Bank.
      * This method skips accounts which are incorrectly specified in the file, but will return false in that case.
-     * @param name The name/path of a file containing account information
      * @return true if all accounts were added successfully; false if there was some sort of error.
      */
-    private boolean fillFromFile(String name) {
+    private boolean fillFromFile() {
         /*
          * bankfile format:
          *      one account per line: <id> <type> <pin> <balance>
@@ -67,7 +66,7 @@ public class Bank extends Observable implements Observer {
         boolean withoutError = true;
         Scanner sc = null;
         try {
-            FileReader fread = new FileReader(name);
+            FileReader fread = new FileReader(bankFile);
             sc = new Scanner(fread);
             while (sc.hasNextLine()) {
                 try {
@@ -79,6 +78,7 @@ public class Bank extends Observable implements Observer {
                     double balance = Double.parseDouble(args[3]);
                     withoutError &= addAccount(args[1], args[0], args[2], balance);
                 } catch (NumberFormatException e) {
+                    //noinspection UnnecessaryContinue
                     continue;
                 }
             }
