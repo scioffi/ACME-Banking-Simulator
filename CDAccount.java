@@ -9,8 +9,8 @@ public class CDAccount extends Account {
     private static final double INTEREST_RATE = .05/12;
     public static final double MINIMUM_BALANCE = 500;
 
-    public CDAccount(String pin, double startingBalance, String id) throws IllegalArgumentException {
-        super(pin, 0, id);
+    public CDAccount(String id, String pin, double startingBalance) throws IllegalArgumentException {
+        super(id, pin, ZERO);
         if (startingBalance < getMinimumBalance())
             throw new IllegalArgumentException("Can't open a certificate of deposit account with" +
                     " less than the minimum balance.");
