@@ -25,8 +25,10 @@ import javafx.scene.media.MediaPlayer;
 
 public class ATMGUI extends JFrame{
     private String activeWindow = "Home";
+    private JLabel mainlabel;
+    private JPasswordField pass;
 
-    public ATMGUI(long ATMID) {
+    public ATMGUI(ATM atm,long ATMID) {
         this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM #" + ATMID);
         this.setSize(700,500);
         //this.setLayout(new BorderLayout());
@@ -43,7 +45,7 @@ public class ATMGUI extends JFrame{
         content.setBorder(BorderFactory.createLineBorder(Color.black));
 
         BoxLayout box = new BoxLayout(content,BoxLayout.Y_AXIS);
-        content.setLayout(box);
+        //content.setLayout(box);
 
         sidebar.setPreferredSize(new Dimension(250,500));
         //sidebar.setBackground(Color.red);
@@ -109,6 +111,23 @@ public class ATMGUI extends JFrame{
         buttclear.setFont(new Font("sans-serif",Font.BOLD,16));
         buttclose.setFont(new Font("sans-serif",Font.BOLD,16));
 
+        JLabel mainlabel = new JLabel("Please enter your account ID:");
+            mainlabel.setPreferredSize(new Dimension(430,70));
+            mainlabel.setFont(new Font("sans-serif",Font.BOLD,30));
+            this.mainlabel = mainlabel;
+        JPasswordField pass = new JPasswordField(6);
+            pass.setEditable(false);
+            pass.setPreferredSize(new Dimension(300,70));
+            pass.setSize(300,70);
+            pass.setBounds(0,200,300,70);
+            pass.setFont(new Font("sans-serif",Font.BOLD,30));
+            this.pass = pass;
+
+        content.add(mainlabel);
+        content.add(pass);
+
+        activeWindow="login1";
+
         this.add(content,BorderLayout.WEST);
         this.add(sidebar,BorderLayout.EAST);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -117,69 +136,33 @@ public class ATMGUI extends JFrame{
         this.pack();
         this.setVisible(true);
 
-        butt0.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(0);
-            }
-        });
-        butt1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(1);
-            }
-        });
-        butt2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(2);
-            }
-        });
-        butt3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(3);
-            }
-        });
-        butt4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(4);
-            }
-        });
-        butt5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(5);
-            }
-        });
-        butt6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(6);
-            }
-        });
-        butt7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(7);
-            }
-        });
-        butt8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(8);
-            }
-        });
-        butt9.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buttonPressed(9);
-            }
-        });
+        ActionListener numbers = e -> {
+            JButton b = (JButton)e.getSource();
+            String s = new String(pass.getPassword());
+            pass.setText(s + b.getText());
+        };
+
+        butt0.addActionListener(numbers);
+        butt1.addActionListener(numbers);
+        butt2.addActionListener(numbers);
+        butt3.addActionListener(numbers);
+        butt4.addActionListener(numbers);
+        butt5.addActionListener(numbers);
+        butt6.addActionListener(numbers);
+        butt7.addActionListener(numbers);
+        butt8.addActionListener(numbers);
+        butt9.addActionListener(numbers);
+
         buttok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                switch(activeWindow){
+                    case "login1":
+                        if(atm.validateID(new String(pass.getPassword()))) {
+                            changeWindow("login2");
+                        }
+                        break;
+                }
                 buttonPressed("OK");
             }
         });
@@ -204,6 +187,7 @@ public class ATMGUI extends JFrame{
     }
 
     private void buttonPressed(int num){
+
         System.out.println(num);
     }
     private void buttonPressed(String str){
@@ -220,6 +204,16 @@ public class ATMGUI extends JFrame{
             case "CLOSE":
                 System.out.println(str);
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+                break;
+        }
+    }
+
+    private void changeWindow(String window){
+        activeWindow = window;
+        switch(activeWindow){
+            case "login2":
+                mainlabel.setText("Please enter your PIN:");
+                pass.setText("");
                 break;
         }
     }
