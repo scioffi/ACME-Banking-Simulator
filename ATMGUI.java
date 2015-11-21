@@ -30,8 +30,9 @@ public class ATMGUI extends JFrame implements Observer{
     private JLabel mainlabel;
     private JPasswordField pass;
 
-    private JPanel content;
+    private JPanel loginscreen;
     private JPanel sidebar;
+    private JPanel homescreen;
 
     public ATMGUI(ATM atm,long ATMID) {
         this.atm = atm;
@@ -42,18 +43,18 @@ public class ATMGUI extends JFrame implements Observer{
         //this.setLayout(new BorderLayout());
 
         this.sidebar = new JPanel();
-        this.content = new JPanel();
+        this.loginscreen = new JPanel();
 
         FlowLayout flow = new FlowLayout();
 
         this.setLayout(flow);
 
-        content.setPreferredSize(new Dimension(450,500));
-        //content.setBackground(Color.green);
-        content.setBorder(BorderFactory.createLineBorder(Color.black));
+        loginscreen.setPreferredSize(new Dimension(450,500));
+        //loginscreen.setBackground(Color.green);
+        loginscreen.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        BoxLayout box = new BoxLayout(content,BoxLayout.Y_AXIS);
-        //content.setLayout(box);
+        BoxLayout box = new BoxLayout(loginscreen,BoxLayout.Y_AXIS);
+        //loginscreen.setLayout(box);
 
         sidebar.setPreferredSize(new Dimension(250,500));
         //sidebar.setBackground(Color.red);
@@ -131,12 +132,12 @@ public class ATMGUI extends JFrame implements Observer{
             pass.setFont(new Font("sans-serif",Font.BOLD,30));
             this.pass = pass;
 
-        content.add(mainlabel);
-        content.add(pass);
+        loginscreen.add(mainlabel);
+        loginscreen.add(pass);
 
         activeWindow="login1";
 
-        this.add(content,BorderLayout.WEST);
+        this.add(loginscreen,BorderLayout.WEST);
         this.add(sidebar,BorderLayout.EAST);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -245,7 +246,10 @@ public class ATMGUI extends JFrame implements Observer{
                 pass.setText("");
                 break;
             case "home":
-
+                loginscreen.removeAll();
+                this.homescreen = new JPanel();
+                homescreen.setLayout(new FlowLayout());
+                
                 break;
         }
     }

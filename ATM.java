@@ -27,7 +27,6 @@ public class ATM extends Observable implements Observer {
         }
         else{
             account = a;
-
             return true;
         }
     }
