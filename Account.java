@@ -17,15 +17,15 @@ public abstract class Account {
      * @param id This account's id number string
      * @throws IllegalArgumentException if the starting balance is negative
      */
-    public Account(String pin, double startingBalance, String id) throws IllegalArgumentException {
+    public Account(String id, String pin, double startingBalance) throws IllegalArgumentException {
         if (!isValidPIN(pin)) {
             this.pin = "0000";
-            this.id = "0000000000";
+            this.id = "000000";
             throw new IllegalArgumentException("Bad PIN format");
         }
         this.pin = pin;
         if (!isValidID(id)) {
-            this.id = "0000000000";
+            this.id = "000000";
             throw new IllegalArgumentException("Bad account number format");
         }
         this.id = id;
@@ -72,8 +72,6 @@ public abstract class Account {
         return balance;
     }
 
-
-
     public synchronized void deposit(double amt) {
         if (amt <= 0)
             return;
@@ -92,9 +90,9 @@ public abstract class Account {
     }
 
     public static boolean isValidID(String n) {
-        if (n.length() != 10)
+        if (n.length() != 6)
             return false;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 6; i++) {
             if (!Character.isDigit(n.charAt(i))) {
                 return false;
             }

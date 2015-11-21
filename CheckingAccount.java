@@ -9,8 +9,8 @@ public class CheckingAccount extends Account implements Withdrawable {
     public static final double MINIMUM_BALANCE = 50;
     private static final double INTEREST_RATE = Account.ZERO;
 
-    public CheckingAccount(String pin, double startingBalance, String id) {
-        super(pin, startingBalance, id);
+    public CheckingAccount(String id, String pin, double startingBalance) {
+        super(id, pin, startingBalance);
     }
 
     @Override
