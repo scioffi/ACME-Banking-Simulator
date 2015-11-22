@@ -36,98 +36,124 @@ public class Bank extends Observable implements Observer {
         for (String cmd : cmds) {
             cmd = cmd.toLowerCase();    // doesn't change ArrayList contents
             String[] words = cmd.split(" ");
-            boolean success = false;
             switch (words[0]) {
             case "o":
-                success = batchOpenAccount(words);
+                batchOpenAccount(cmd, words);
                 break;
             case "c":
-                success = batchCloseAccount(words);
+                batchCloseAccount(cmd, words);
                 break;
             case "d":
-                success = batchDeposit(words);
+                batchDeposit(cmd, words);
                 break;
             case "w":
-                success = batchWithdraw(words);
+                batchWithdraw(cmd, words);
                 break;
             case "a":
-                success = batchApplyCharges(words);
+                batchApplyCharges(cmd, words);
                 break;
             }
-            System.out.println(cmd + " " + (success ? "SUCCEEDED" : "FAILED"));
         }
     }
     
-    private boolean batchOpenAccount(String[] args) {
-        if (args.length != 5) {
-            return false;
-        }
-        double bal;
-        try {
-            bal = Double.parseDouble(args[4]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return addAccount(args[1], args[2], args[3], bal);
+    private void batchOpenAccount(String cmd, String[] args) {
+        boolean success;
+        do {
+            if (args.length != 5) {
+                success = false;
+                break;
+            }
+            double bal;
+            try {
+                bal = Double.parseDouble(args[4]);
+            } catch (NumberFormatException e) {
+                success = false;
+                break;
+            }
+            success = addAccount(args[1], args[2], args[3], bal);
+        } while(false);
+        System.out.println(cmd + " " + (success ? "SUCCEEDED" : "FAILED"));
     }
     
-    private boolean batchCloseAccount(String[] args) {
-        if (args.length != 2) {
-            return false;
-        }
-        return removeAccount(args[1]);
+    private void batchCloseAccount(String cmd, String[] args) {
+        boolean success;
+        do {
+            if (args.length != 2) {
+                success = false;
+                break;
+            }
+            success = removeAccount(args[1]);
+        } while(false);
+        System.out.println(cmd + " " + (success ? "SUCCEEDED" : "FAILED"));
     }
     
-    private boolean batchDeposit(String[] args) {
-        if (args.length != 3) {
-            return false;
-        }
-        Account a = getAccount(args[1]);
-        if (a == null) {
-            return false;
-        }
-        double amt;
-        try {
-            amt = Double.parseDouble(args[2]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        a.deposit(amt);
-        return true;
+    private void batchDeposit(String cmd, String[] args) {
+        boolean success;
+        Account a = null;
+        do {
+            if (args.length != 3) {
+                success = false;
+                break;
+            }
+            a = getAccount(args[1]);
+            if (a == null) {
+                success = false;
+                break;
+            }
+            double amt;
+            try {
+                amt = Double.parseDouble(args[2]);
+            } catch (NumberFormatException e) {
+                success = false;
+                break;
+            }
+            a.deposit(amt);
+            success = true;
+        } while (false);
+        System.out.println(cmd + " " + 
+                (success ? "SUCCEEDED New Balance: " + Account.formatCash(a.getBalance()) : "FAILED"));
     }
     
-    private boolean batchWithdraw(String[] args) {
-        if (args.length != 3) {
-            return false;
-        }
-        Account a = getAccount(args[1]);
-        if (a == null || !(a instanceof Withdrawable)) {
-            return false;
-        }
-        double amt;
-        try {
-            amt = Double.parseDouble(args[2]);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        ((Withdrawable)a).withdraw(amt);
-        return true;
+    private void batchWithdraw(String cmd, String[] args) {
+        boolean success;
+        Account a = null;
+        do {
+            if (args.length != 3) {
+                success = false;
+                break;
+            }
+            a = getAccount(args[1]);
+            if (a == null || !(a instanceof Withdrawable)) {
+                success = false;
+                break;
+            }
+            double amt;
+            try {
+                amt = Double.parseDouble(args[2]);
+            } catch (NumberFormatException e) {
+                success = false;
+                break;
+            }
+            ((Withdrawable)a).withdraw(amt);
+            success = true;
+        } while(false);
+        System.out.println(cmd + " " +
+                (success ? "SUCCEEDED New Balance: " + Account.formatCash(a.getBalance()) : "FAILED"));
     }
     
-    private boolean batchApplyCharges(String[] args) {
+    private void batchApplyCharges(String cmd, String[] args) {
         if (args.length != 1) {
-            return false;
+            return;
         }
         System.out.println("=========== Interest Report ===========");
         System.out.println("Account\t\tAdjustment\t\tNew Balance");
         System.out.println("-------\t\t----------\t\t-----------");
         for (Account a : accounts) {
             double change = a.applyCharges();
-            System.out.println(a.getID() + "\t\t" + 
-                               Account.formatCash(change) + "\t\t" +
-                               Account.formatCash(a.getBalance()));
+            System.out.println(a.getID() + "\t\t" +
+                    Account.formatCash(change) + "\t\t" +
+                    Account.formatCash(a.getBalance()));
         }
-        return true;
     }
     
     public static void main(String[] args) {
