@@ -14,6 +14,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class ATMGUI extends JFrame implements Observer{
+    private JFrame frame;
     private String activeWindow = "login1";
     private ATM atm;
     private long id;
@@ -23,9 +24,10 @@ public class ATMGUI extends JFrame implements Observer{
     private JPanel loginscreen;
     private JPanel sidebar;
     private JPanel homescreen;
+    private JPanel message;
 
     private JButton[] numberBtns;
-    
+
     public ATMGUI(ATM atm, long ATMID) {
         
         // try to make the window match the look of the current platform
@@ -58,9 +60,6 @@ public class ATMGUI extends JFrame implements Observer{
         loginscreen.setPreferredSize(new Dimension(450, 500));
         //loginscreen.setBackground(Color.green);
         loginscreen.setBorder(BorderFactory.createLineBorder(Color.black));
-
-        BoxLayout box = new BoxLayout(loginscreen,BoxLayout.Y_AXIS);
-        //loginscreen.setLayout(box);
 
         sidebar.setPreferredSize(new Dimension(250, 500));
         //sidebar.setBackground(Color.red);
@@ -133,10 +132,33 @@ public class ATMGUI extends JFrame implements Observer{
         this.pack();
         this.setVisible(true);
 
+        frame = this;
+
         ActionListener numbers = e -> {
-            JButton b = (JButton)e.getSource();
-            String s = new String(pass.getPassword());
-            pass.setText(s + b.getText());
+            JButton b = (JButton) e.getSource();
+            switch(activeWindow) {
+                case "login1":
+                case "login2":
+                    String s = new String(pass.getPassword());
+                    pass.setText(s + b.getText());
+                    break;
+                case "home":
+                    switch(b.getText()) {
+                        case "1":
+                            changeWindow("balance");
+                            break;
+                        case "2":
+                            changeWindow("deposit");
+                            break;
+                        case "3":
+                            changeWindow("withdraw");
+                            break;
+                        case "4":
+                            changeWindow("logout");
+                            break;
+                    }
+                    break;
+            }
         };
 
         for (int i = 0; i < 10; i++) {
@@ -154,6 +176,9 @@ public class ATMGUI extends JFrame implements Observer{
                         break;
                     case "login2":
                         if (atm.validatePIN(new String(pass.getPassword()))){
+                            System.out.println(pass.getPassword());
+                            loginscreen.removeAll();
+                            loginscreen.setVisible(false);
                             changeWindow("home");
                         } else {
                             changeWindow("login1");
@@ -167,6 +192,8 @@ public class ATMGUI extends JFrame implements Observer{
             @Override
             public void actionPerformed(ActionEvent e) {
                 switch(activeWindow){
+                    case "login1":
+                        break;
                     case "login2":
                         changeWindow("login1");
                         break;
@@ -216,22 +243,59 @@ public class ATMGUI extends JFrame implements Observer{
     }
 
     private void changeWindow(String window) {
-        activeWindow = window;
         switch(activeWindow) {
             case "login1":
                 mainlabel.setText("Please enter your account ID:");
                 pass.setText("");
                 break;
+
             case "login2":
                 mainlabel.setText("Please enter your PIN:");
                 pass.setText("");
                 break;
+
             case "home":
-                loginscreen.removeAll();
                 this.homescreen = new JPanel();
-                homescreen.setLayout(new FlowLayout());
+                homescreen.setPreferredSize(new Dimension(450,500));
+                homescreen.setBorder(BorderFactory.createLineBorder(Color.black));
+
+                Font labelFont = new Font("sans-serif",0,40);
+
+                JLabel l1 = new JLabel("1) Balance Inquiry");
+                    l1.setFont(labelFont);
+                JLabel l2 = new JLabel("2) Deposit Money");
+                    l2.setFont(labelFont);
+                JLabel l3 = new JLabel("3) Withdraw Money");
+                    l3.setFont(labelFont);
+                JLabel l4 = new JLabel("4) Log Off");
+                    l4.setFont(labelFont);
+
+                homescreen.setLayout(new BoxLayout(homescreen,BoxLayout.Y_AXIS));
+
+                homescreen.add(l1);
+                homescreen.add(l2);
+                homescreen.add(l3);
+                homescreen.add(l4);
+
+                this.message = new JPanel();
+                message.setPreferredSize(new Dimension(450,500));
+                message.setLayout(new FlowLayout());
+                message.setBorder(BorderFactory.createLineBorder(Color.black));
+
+                frame.add(homescreen,BorderLayout.WEST);
+                frame.remove(sidebar);
+                frame.add(sidebar,BorderLayout.EAST);
+
+                break;
+
+            case "deposit":
+                getContentPane().removeAll();
+                break;
+            default:
+                System.out.println("Well Shit...");
                 break;
         }
+        activeWindow = window;
     }
 
     @Override
