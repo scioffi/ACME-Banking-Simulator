@@ -3,5 +3,5 @@
  * @author Michael Incardona mji8299
  */
 public interface Withdrawable {
-    public void withdraw(double amt);
+    boolean withdraw(double amt);
 }

@@ -11,9 +11,9 @@ public class Bank extends Observable implements Observer {
 
     private ArrayList<Account> accounts;
 
-    private final static String ACCOUNT_CHECKING_STRING = "CHK";
-    private final static String ACCOUNT_SAVING_STRING = "SAV";
-    private final static String ACCOUNT_CD_STRING = "COD";
+    private final static String ACCOUNT_CHECKING_STRING = "x";
+    private final static String ACCOUNT_SAVING_STRING = "s";
+    private final static String ACCOUNT_CD_STRING = "c";
     
     private String bankFile;
     
@@ -31,7 +31,96 @@ public class Bank extends Observable implements Observer {
      * @param batchFile File containing the instructions to execute
      */
     private void batchProcess(String batchFile) {
-        
+        ArrayList<String> cmds = getLinesFromFile(batchFile);
+        for (String cmd : cmds) {
+            cmd = cmd.toLowerCase();    // doesn't change ArrayList contents
+            String[] words = cmd.split(" ");
+            boolean success = false;
+            switch (words[0]) {
+            case "o":
+                success = batchOpenAccount(words);
+                break;
+            case "c":
+                success = batchCloseAccount(words);
+                break;
+            case "d":
+                success = batchDeposit(words);
+                break;
+            case "w":
+                success = batchWithdraw(words);
+                break;
+            case "a":
+                success = batchApplyCharges(words);
+                break;
+            }
+            System.out.println(cmd + " " + (success ? "SUCCEEDED" : "FAILED"));
+        }
+    }
+    
+    private boolean batchOpenAccount(String[] args) {
+        if (args.length != 5) {
+            return false;
+        }
+        double bal;
+        try {
+            bal = Double.parseDouble(args[4]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return addAccount(args[1], args[2], args[3], bal);
+    }
+    
+    private boolean batchCloseAccount(String[] args) {
+        if (args.length != 2) {
+            return false;
+        }
+        return removeAccount(args[1]);
+    }
+    
+    private boolean batchDeposit(String[] args) {
+        if (args.length != 3) {
+            return false;
+        }
+        Account a = getAccount(args[1]);
+        if (a == null) {
+            return false;
+        }
+        double amt;
+        try {
+            amt = Double.parseDouble(args[2]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        a.deposit(amt);
+        return true;
+    }
+    
+    private boolean batchWithdraw(String[] args) {
+        if (args.length != 3) {
+            return false;
+        }
+        Account a = getAccount(args[1]);
+        if (a == null || !(a instanceof Withdrawable)) {
+            return false;
+        }
+        double amt;
+        try {
+            amt = Double.parseDouble(args[2]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        ((Withdrawable)a).withdraw(amt);
+        return true;
+    }
+    
+    private boolean batchApplyCharges(String[] args) {
+        if (args.length != 1) {
+            return false;
+        }
+        for (Account a : accounts) {
+            a.applyCharges();
+        }
+        return true;
     }
     
     public static void main(String[] args) {
@@ -107,6 +196,10 @@ public class Bank extends Observable implements Observer {
         return null;
     }
     
+    public boolean hasAccount(String id) {
+        return getAccount(id) != null;
+    }
+    
     public ArrayList<Account> getAccounts() {
         return accounts;
     }
@@ -116,11 +209,23 @@ public class Bank extends Observable implements Observer {
         notifyObservers();
     }
     
+    private boolean removeAccount(String id) {
+        Account a = getAccount(id);
+        if (a == null) {
+            return false;
+        }
+        a.deleteObservers();
+        return accounts.remove(a);
+    }
+    
     private boolean addAccount(String type, String id, String pin, double balance) {
         Account act;
+        if (hasAccount(id)) {
+            return false;
+        }
         try {
             // try to create a new account of the appropriate type
-            switch (type) {
+            switch (type.toLowerCase()) {
             case ACCOUNT_CHECKING_STRING:
                 act = new CheckingAccount(id, pin, balance);
                 break;

@@ -32,11 +32,12 @@ public class CheckingAccount extends Account implements Withdrawable {
     }
 
     @Override
-    public synchronized void withdraw(double amt) {
+    public synchronized boolean withdraw(double amt) {
         if (amt <= 0 || amt > this.getBalance())
-            return;
+            return false;
         this.setBalance(this.getBalance() - amt);
         triggerUpdate();
+        return true;
     }
     
     @Override

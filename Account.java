@@ -61,6 +61,16 @@ public abstract class Account extends Observable {
      */
     public abstract double getInterestRate();
 
+    /**
+     * Applies one month of interest and penalties to this account.
+     * Both interest and penalties are applied based on the initial account balance.
+     */
+    public void applyCharges() {
+        double amt = getInterestRate() * this.getBalance() - getMonthlyPenalty();
+        setBalance(getBalance() + amt);
+        triggerUpdate();
+    }
+
     protected synchronized double setBalance(double newBalance) {
         return this.balance = newBalance;
     }
