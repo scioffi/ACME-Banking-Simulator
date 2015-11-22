@@ -143,6 +143,7 @@ public class ATMGUI extends JFrame implements Observer{
                     pass.setText(s + b.getText());
                     break;
                 case "home":
+                    System.out.println("HOME -> " + activeWindow);
                     switch(b.getText()) {
                         case "1":
                             changeWindow("balance");
@@ -165,28 +166,28 @@ public class ATMGUI extends JFrame implements Observer{
             numberBtns[i].addActionListener(numbers);
         }
 
-        buttok.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switch(activeWindow){
-                    case "login1":
-                        if (atm.validateID(new String(pass.getPassword()))) {
-                            changeWindow("login2");
-                        }
-                        break;
-                    case "login2":
-                        if (atm.validatePIN(new String(pass.getPassword()))){
-                            System.out.println(pass.getPassword());
-                            loginscreen.removeAll();
-                            loginscreen.setVisible(false);
-                            changeWindow("home");
-                        } else {
-                            changeWindow("login1");
-                        }
-                        break;
-                }
-                buttonPressed("OK");
+        buttok.addActionListener(e -> {
+            switch(activeWindow){
+                case "login1":
+                    if (atm.validateID(new String(pass.getPassword()))) {
+                        changeWindow("login2");
+                    }
+                    else{
+                        System.out.println("BAD ACCOUNT");
+                    }
+                    break;
+                case "login2":
+                    if (atm.validatePIN(new String(pass.getPassword()))){
+                        System.out.println(pass.getPassword());
+                        loginscreen.removeAll();
+                        loginscreen.setVisible(false);
+                        changeWindow("home");
+                    } else {
+                        changeWindow("login1");
+                    }
+                    break;
             }
+            buttonPressed("OK");
         });
         buttcancel.addActionListener(new ActionListener() {
             @Override
@@ -243,6 +244,9 @@ public class ATMGUI extends JFrame implements Observer{
     }
 
     private void changeWindow(String window) {
+        if (atm.doesWindowExist(window)) {
+            activeWindow = window;
+        }
         switch(activeWindow) {
             case "login1":
                 mainlabel.setText("Please enter your account ID:");
@@ -295,7 +299,6 @@ public class ATMGUI extends JFrame implements Observer{
                 System.out.println("Well Shit...");
                 break;
         }
-        activeWindow = window;
     }
 
     @Override

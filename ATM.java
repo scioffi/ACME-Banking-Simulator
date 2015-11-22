@@ -8,6 +8,7 @@ import java.util.Observer;
 public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
+    public String[] windows = {"login1","login2","home","message","balance","deposit","widthdraw"};
 
     public ATM(Bank b) {
         bank = b;
@@ -61,6 +62,15 @@ public class ATM extends Observable implements Observer {
     }
     public double returnCash(String str){
         return Double.parseDouble(str.substring(1,str.length()));
+    }
+
+    public boolean doesWindowExist(String window){
+        for(int i = 0; i < windows.length; i++){
+            if(windows[i].equals(window)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) {
