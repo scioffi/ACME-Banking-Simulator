@@ -197,6 +197,10 @@ public class ATMGUI extends JFrame implements Observer{
                         changeWindow("login1");
                     }
                     break;
+                case "deposit":
+                    atm.deposit(atm.returnCash(valuestr));
+                    System.out.println(atm.returnCash(valuestr));
+                    break;
             }
             buttonPressed("OK");
         });
@@ -312,7 +316,7 @@ public class ATMGUI extends JFrame implements Observer{
                 depositscreen.setBorder(BorderFactory.createLineBorder(Color.black));
                 depositscreen.setLayout(new FlowLayout());
 
-                JLabel msg = new JLabel("Enter an ammount to deposit:");
+                JLabel msg = new JLabel("Enter an amount to deposit:");
                     msg.setPreferredSize(new Dimension(430, 70));
                     msg.setFont(new Font("sans-serif",0, 30));
                 field = new JTextField();
