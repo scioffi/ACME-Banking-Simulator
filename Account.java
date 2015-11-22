@@ -95,11 +95,12 @@ public abstract class Account extends Observable {
         return balance;
     }
 
-    public synchronized void deposit(double amt) {
+    public synchronized boolean deposit(double amt) {
         if (amt <= 0)
-            return;
+            return false;
         this.setBalance(this.getBalance() + amt);
         triggerUpdate();
+        return true;
     }
 
     public static boolean isValidPIN(String n) {
