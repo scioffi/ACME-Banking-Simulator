@@ -48,7 +48,7 @@ public class ATM extends Observable implements Observer {
     }
 
     public String formatCash(String numbers){
-        String temp = "$";
+        String temp = "";
         if(numbers.length() == 1){
             temp += "0.0" + numbers;
         }
@@ -58,7 +58,7 @@ public class ATM extends Observable implements Observer {
         else{
             temp += numbers.substring(0,numbers.length()-2) + "." + numbers.substring(numbers.length()-2,numbers.length());
         }
-        return temp;
+        return "$" + temp;
     }
     public double returnCash(String str){
         return Double.parseDouble(str.substring(1,str.length()));

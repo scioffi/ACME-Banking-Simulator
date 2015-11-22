@@ -20,13 +20,18 @@ public class ATMGUI extends JFrame implements Observer{
     private long id;
     private JLabel mainlabel;
     private JPasswordField pass;
+    private JTextField field;
 
     private JPanel loginscreen;
     private JPanel sidebar;
     private JPanel homescreen;
     private JPanel message;
+    private JPanel depositscreen;
 
     private JButton[] numberBtns;
+
+    private double value;
+    private String valuestr = "";
 
     public ATMGUI(ATM atm, long ATMID) {
         
@@ -146,7 +151,6 @@ public class ATMGUI extends JFrame implements Observer{
                     System.out.println("HOME -> " + activeWindow);
                     switch(b.getText()) {
                         case "1":
-                            changeWindow("balance");
                             break;
                         case "2":
                             changeWindow("deposit");
@@ -158,6 +162,13 @@ public class ATMGUI extends JFrame implements Observer{
                             changeWindow("logout");
                             break;
                     }
+                    break;
+                case "deposit":
+                    String temp = valuestr + b.getText();
+                    valuestr += b.getText();
+                    System.out.println(temp);
+                    temp = atm.formatCash(temp);
+                    field.setText(temp);
                     break;
             }
         };
@@ -292,7 +303,32 @@ public class ATMGUI extends JFrame implements Observer{
 
                 break;
             case "deposit":
-                getContentPane().removeAll();
+                homescreen.setVisible(false);
+                frame.remove(homescreen);
+                frame.remove(sidebar);
+
+                this.depositscreen = new JPanel();
+                depositscreen.setPreferredSize(new Dimension(450,500));
+                depositscreen.setBorder(BorderFactory.createLineBorder(Color.black));
+                depositscreen.setLayout(new FlowLayout());
+
+                JLabel msg = new JLabel("Enter an ammount to deposit:");
+                    msg.setPreferredSize(new Dimension(430, 70));
+                    msg.setFont(new Font("sans-serif",0, 30));
+                field = new JTextField();
+                    field.setEditable(false);
+                    field.setPreferredSize(new Dimension(300, 70));
+                    field.setSize(300, 70);
+                    field.setBounds(0, 200, 300, 70);
+                    field.setFont(new Font("sans-serif", Font.BOLD, 30));
+                    field.setText("$");
+
+                depositscreen.add(msg);
+                depositscreen.add(field);
+                depositscreen.validate();
+
+                frame.add(depositscreen,BorderLayout.WEST);
+                frame.add(sidebar,BorderLayout.EAST);
                 break;
             default:
                 System.out.println("Well Shit...");
