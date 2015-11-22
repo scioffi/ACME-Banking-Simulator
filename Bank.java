@@ -1,9 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Represents a logical Bank.
@@ -64,31 +61,41 @@ public class Bank extends Observable implements Observer {
          *      <type> is CHK, SAV, or COD
          */
         boolean withoutError = true;
-        Scanner sc = null;
-        try {
-            FileReader fread = new FileReader(bankFile);
-            sc = new Scanner(fread);
-            while (sc.hasNextLine()) {
-                try {
-                    String line = sc.nextLine();
-                    String[] args = line.split(" ");
-                    if (args.length != 4) {
-                        continue;
-                    }
-                    double balance = Double.parseDouble(args[3]);
-                    withoutError &= addAccount(args[1], args[0], args[2], balance);
-                } catch (NumberFormatException e) {
-                    //noinspection UnnecessaryContinue
+        ArrayList<String> lines = getLinesFromFile(bankFile);
+        if (lines == null) {
+            return false;
+        }
+        for (String line : lines) {
+            try {
+                String[] args = line.split(" ");
+                if (args.length != 4) {
                     continue;
                 }
+                double balance = Double.parseDouble(args[3]);
+                withoutError &= addAccount(args[1], args[0], args[2], balance);
+            } catch (NumberFormatException e) {
+                withoutError = false;
             }
-            return withoutError;
-        } catch (FileNotFoundException e) {
-            return false;
+        }
+        return withoutError;
+    }
+    
+    ArrayList<String> getLinesFromFile(String fname) {
+        ArrayList<String> lines = new ArrayList<>();
+        Scanner sc = null;
+        try {
+            sc = new Scanner(new FileReader(fname));
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                lines.add(line);
+            }
+        } catch (FileNotFoundException | NoSuchElementException | IllegalStateException e) {
+            return null;
         } finally {
             if (sc != null)
                 sc.close();
         }
+        return lines;
     }
     
     public Account getAccount(String id) {
