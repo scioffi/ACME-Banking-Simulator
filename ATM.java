@@ -68,6 +68,10 @@ public class ATM extends Observable implements Observer {
         return account.deposit(cash);
     }
 
+    public double balance(){
+        return account.getBalance();
+    }
+
     public boolean doesWindowExist(String window){
         for(int i = 0; i < windows.length; i++){
             if(windows[i].equals(window)){
