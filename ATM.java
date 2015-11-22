@@ -45,7 +45,24 @@ public class ATM extends Observable implements Observer {
         this.setChanged();
         this.notifyObservers();
     }
-    
+
+    public String formatCash(String numbers){
+        String temp = "$";
+        if(numbers.length() == 1){
+            temp += "0.0" + numbers;
+        }
+        else if(numbers.length() == 2){
+            temp += "0."+ numbers;
+        }
+        else{
+            temp += numbers.substring(0,numbers.length()-2) + "." + numbers.substring(numbers.length()-2,numbers.length());
+        }
+        return temp;
+    }
+    public double returnCash(String str){
+        return Double.parseDouble(str.substring(1,str.length()));
+    }
+
     public static void main(String[] args) {
         new ATM(new Bank("test.txt", null));
     }
