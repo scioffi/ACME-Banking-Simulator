@@ -291,7 +291,6 @@ public class ATMGUI extends JFrame implements Observer{
                 frame.add(sidebar,BorderLayout.EAST);
 
                 break;
-
             case "deposit":
                 getContentPane().removeAll();
                 break;

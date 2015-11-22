@@ -24,6 +24,7 @@ public class Bank extends Observable implements Observer {
         if (batchFile != null) {
             batchProcess(batchFile);
         }
+        // output
     }
 
     /**
@@ -117,8 +118,14 @@ public class Bank extends Observable implements Observer {
         if (args.length != 1) {
             return false;
         }
+        System.out.println("=========== Interest Report ===========");
+        System.out.println("Account\t\tAdjustment\t\tNew Balance");
+        System.out.println("-------\t\t----------\t\t-----------");
         for (Account a : accounts) {
-            a.applyCharges();
+            double change = a.applyCharges();
+            System.out.println(a.getID() + "\t\t" + 
+                               Account.formatCash(change) + "\t\t" +
+                               Account.formatCash(a.getBalance()));
         }
         return true;
     }
@@ -169,7 +176,7 @@ public class Bank extends Observable implements Observer {
         return withoutError;
     }
     
-    ArrayList<String> getLinesFromFile(String fname) {
+    private ArrayList<String> getLinesFromFile(String fname) {
         ArrayList<String> lines = new ArrayList<>();
         Scanner sc = null;
         try {

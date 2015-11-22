@@ -9,7 +9,7 @@ public abstract class Account extends Observable {
     
     public static final double ZERO = 0;
     
-    private static DecimalFormat df = new DecimalFormat("$#.00");
+    private static DecimalFormat df = new DecimalFormat("$#0.00");
     
     private final String id;
     private final String pin;
@@ -25,12 +25,12 @@ public abstract class Account extends Observable {
     public Account(String id, String pin, double startingBalance) throws IllegalArgumentException {
         if (!isValidPIN(pin)) {
             this.pin = "0000";
-            this.id = "000000";
+            this.id = "0000";
             throw new IllegalArgumentException("Bad PIN format");
         }
         this.pin = pin;
         if (!isValidID(id)) {
-            this.id = "000000";
+            this.id = "0000";
             throw new IllegalArgumentException("Bad account number format");
         }
         this.id = id;
@@ -50,6 +50,7 @@ public abstract class Account extends Observable {
     /**
      * Gets the monthly penalty to be applied if the balance falls below the minimum.
      * This amount may depend on the balance of the account.
+     * This method does not check that the balance is below the minimum.
      * @return the monthly penalty
      */
     public abstract double getMonthlyPenalty();
@@ -65,10 +66,13 @@ public abstract class Account extends Observable {
      * Applies one month of interest and penalties to this account.
      * Both interest and penalties are applied based on the initial account balance.
      */
-    public void applyCharges() {
-        double amt = getInterestRate() * this.getBalance() - getMonthlyPenalty();
+    public double applyCharges() {
+        double amt = getInterestRate() * this.getBalance();
+        if (this.getBalance() < getMinimumBalance())
+            amt -= getMonthlyPenalty();
         setBalance(getBalance() + amt);
         triggerUpdate();
+        return amt;
     }
 
     protected synchronized double setBalance(double newBalance) {
@@ -110,9 +114,9 @@ public abstract class Account extends Observable {
     }
 
     public static boolean isValidID(String n) {
-        if (n.length() != 6)
+        if (n.length() < 4)
             return false;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < n.length(); i++) {
             if (!Character.isDigit(n.charAt(i))) {
                 return false;
             }
