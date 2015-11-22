@@ -159,7 +159,7 @@ public class ATMGUI extends JFrame implements Observer{
                             changeWindow("withdraw");
                             break;
                         case "4":
-                            changeWindow("logout");
+                            close();
                             break;
                     }
                     break;
@@ -197,6 +197,17 @@ public class ATMGUI extends JFrame implements Observer{
                         changeWindow("login1");
                     }
                     break;
+                case "deposit":
+                    double temp = Double.parseDouble(valuestr.substring(0,valuestr.length()-2));
+                    double cash = temp + Double.parseDouble("."+valuestr.substring(valuestr.length()-2));
+                    if(atm.deposit(cash)){
+                        System.out.println("SUCCESS");
+                        System.out.println(atm.balance());
+                    }
+                    else{
+                        System.out.println("NO MONEY HERE");
+                    }
+                    break;
             }
             buttonPressed("OK");
         });
@@ -208,6 +219,10 @@ public class ATMGUI extends JFrame implements Observer{
                         break;
                     case "login2":
                         changeWindow("login1");
+                        break;
+                    case "deposit":
+                        frame.remove(depositscreen);
+                        changeWindow("home");
                         break;
                 }
                 buttonPressed("CANCEL");
@@ -246,10 +261,7 @@ public class ATMGUI extends JFrame implements Observer{
                 break;
             case "CLOSE":
                 System.out.println(str);
-                atm.deleteObservers();  // remove dangling references to observer objects for garbage collection
-                atm.closeAll();
-                atm = null;
-                this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+                close();
                 break;
         }
     }
@@ -312,7 +324,7 @@ public class ATMGUI extends JFrame implements Observer{
                 depositscreen.setBorder(BorderFactory.createLineBorder(Color.black));
                 depositscreen.setLayout(new FlowLayout());
 
-                JLabel msg = new JLabel("Enter an ammount to deposit:");
+                JLabel msg = new JLabel("Enter an amount to deposit:");
                     msg.setPreferredSize(new Dimension(430, 70));
                     msg.setFont(new Font("sans-serif",0, 30));
                 field = new JTextField();
@@ -334,6 +346,13 @@ public class ATMGUI extends JFrame implements Observer{
                 System.out.println("Well Shit...");
                 break;
         }
+    }
+
+    public void close(){
+        atm.deleteObservers();  // remove dangling references to observer objects for garbage collection
+        atm.closeAll();
+        atm = null;
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
     @Override

@@ -64,6 +64,14 @@ public class ATM extends Observable implements Observer {
         return Double.parseDouble(str.substring(1,str.length()));
     }
 
+    public boolean deposit(Double cash){
+        return account.deposit(cash);
+    }
+
+    public double balance(){
+        return account.getBalance();
+    }
+
     public boolean doesWindowExist(String window){
         for(int i = 0; i < windows.length; i++){
             if(windows[i].equals(window)){
