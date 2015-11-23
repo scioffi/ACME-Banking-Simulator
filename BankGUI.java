@@ -7,6 +7,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -72,6 +74,14 @@ public class BankGUI extends JFrame implements Observer {
         this.update(null, null);
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                bank.printSummary();
+                super.windowClosing(e);
+            }
+        });
         
         this.setVisible(true);
     }

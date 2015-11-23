@@ -60,7 +60,8 @@ public class ATM extends Observable implements Observer {
         }
         return "$" + temp;
     }
-    public double returnCash(String str){
+    
+    public double returnCash(String str) {
         return Double.parseDouble(str.substring(1,str.length()));
     }
 

@@ -1,0 +1,5 @@
+1. Are account IDs fixed width or variable width?
+2. If variable width, are two account IDs the same if they only differ by leading zeroes?
+    e.g. "0012" and "00012" are both four or more digits, but are numerically identical.
+3. Can accounts have a negative balance?
+
