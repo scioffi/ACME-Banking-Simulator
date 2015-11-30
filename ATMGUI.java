@@ -141,6 +141,7 @@ public class ATMGUI extends JFrame {
             
             default:
                 System.out.println("oops, that window doesn't exist");
+                setWindow(activeWindow);
                 return;
         }
         activeWindow = window;
