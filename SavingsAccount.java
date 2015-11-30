@@ -63,7 +63,7 @@ public class SavingsAccount extends Account implements Withdrawable {
     
     @Override
     public synchronized String toString() {
-        return "Savings account #" + getID() + " has balance " + formatCash(getBalance());
+        return "Savings account " + getID() + " has balance " + formatCash(getBalance());
     }
 
     @Override

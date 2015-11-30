@@ -60,7 +60,7 @@ public class CheckingAccount extends Account implements Withdrawable {
     
     @Override
     public synchronized String toString() {
-        return "Checking account #" + getID() + " has balance " + formatCash(getBalance());
+        return "Checking account " + getID() + " has balance " + formatCash(getBalance());
     }
 
     @Override

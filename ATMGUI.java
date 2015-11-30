@@ -6,6 +6,8 @@
  */
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -16,8 +18,14 @@ public class ATMGUI extends JFrame {
     private static final String SCR_LOGIN_2 = "login2";
     private static final String SCR_DEPOSIT = "deposit";
     private static final String SCR_HOME = "home";
+    private static final String SCR_BALANCE = "balance";
+    private static final String SCR_WITHDRAW = "withdraw";
+    private static final String SCR_DEPOSIT_OK = "deposit_ok";
 
-    private JFrame frame;
+    private static final Border BORDER_LINE = BorderFactory.createLineBorder(Color.BLACK);
+    private static final Border BORDER_SUNKEN = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
+    private static final Border BORDER_SCREEN = BORDER_SUNKEN;
+    
     private String activeWindow = SCR_LOGIN_1;
     private ATM atm;
     private JLabel mainlabel;
@@ -31,6 +39,7 @@ public class ATMGUI extends JFrame {
     private JPanel sidebar;
     private JPanel homescreen;
     private JPanel depositscreen;
+    private JPanel depositokscreen;
     
     private String valuestr = "";
 
@@ -52,31 +61,27 @@ public class ATMGUI extends JFrame {
         */
         
         this.atm = atm;
-
+        
         this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM ID: " + ATMID);
         this.setSize(700, 500);
-        //this.setLayout(new BorderLayout());
 
         this.sidebar = makeSidebar();
         this.homescreen = makeHomeScreen();
         this.loginscreen1 = makeLoginScreen1();
         this.loginscreen2 = makeLoginScreen2();
+        this.depositscreen = makeDepositScreen();
+        this.depositokscreen = makeDepositConfirmScreen();
 
         FlowLayout flow = new FlowLayout();
 
         this.setLayout(flow);
 
-        activeWindow = SCR_LOGIN_1;
-
-        this.add(loginscreen1, BorderLayout.WEST);
-        this.add(sidebar, BorderLayout.EAST);
+        setWindow(SCR_LOGIN_1);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
-
-        frame = this;
     }
 
     private void buttonPressed(String str) {
@@ -97,32 +102,41 @@ public class ATMGUI extends JFrame {
         }
     }
 
-    private void changeWindow(String window) {
-        removeAllComponents(frame);
-        switch(activeWindow) {
+    private void setWindow(String window) {
+        removeAllComponents();
+        switch (window) {
             case SCR_LOGIN_1:
-                frame.add(loginscreen1, BorderLayout.WEST);
-                frame.add(sidebar, BorderLayout.EAST);
-                mainlabel.setText("Please enter your account ID:");
+                add(loginscreen1, BorderLayout.WEST);
+                add(sidebar, BorderLayout.EAST);
                 textField.setText("");
                 break;
 
             case SCR_LOGIN_2:
-                frame.add(loginscreen2, BorderLayout.WEST);
-                frame.add(sidebar, BorderLayout.EAST);
-                mainlabel.setText("Please enter your PIN:");
+                add(loginscreen2, BorderLayout.WEST);
+                add(sidebar, BorderLayout.EAST);
                 passwordField.setText("");
                 break;
 
             case SCR_HOME:
-                frame.add(homescreen, BorderLayout.WEST);
-                frame.add(sidebar, BorderLayout.EAST);
+                add(homescreen, BorderLayout.WEST);
+                add(sidebar, BorderLayout.EAST);
                 break;
             
             case SCR_DEPOSIT:
-                this.depositscreen = makeDepositScreen();
-                frame.add(depositscreen, BorderLayout.WEST);
-                frame.add(sidebar, BorderLayout.EAST);
+                add(depositscreen, BorderLayout.WEST);
+                add(sidebar, BorderLayout.EAST);
+                cashField.setText("$0.00");
+                valuestr = "";
+                break;
+            
+            case SCR_DEPOSIT_OK:
+                add(depositokscreen, BorderLayout.WEST);
+                add(sidebar, BorderLayout.EAST);
+                break;
+            
+            case SCR_BALANCE:
+                add(makeBalanceViewScreen(), BorderLayout.WEST);
+                add(sidebar, BorderLayout.EAST);
                 break;
             
             default:
@@ -130,7 +144,7 @@ public class ATMGUI extends JFrame {
                 return;
         }
         activeWindow = window;
-        validate();
+        render();
     }
 
     public void close() {
@@ -140,20 +154,23 @@ public class ATMGUI extends JFrame {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
     
-    private void removeAllComponents(JFrame f) {
-        while (f.getContentPane().getComponentCount() > 0)
-            f.remove(f.getContentPane().getComponent(0));
+    private void removeAllComponents() {
+        getContentPane().removeAll();
+    }
+    
+    private void render() {
+        validate();
+        repaint();
     }
 
     private JPanel makeLoginScreen1() {
         JPanel ls = new JPanel();
         ls.setPreferredSize(new Dimension(450, 500));
-        ls.setBorder(BorderFactory.createLineBorder(Color.black));
+        ls.setBorder(BORDER_SCREEN);
 
-        JLabel mainlabel = new JLabel("Please enter your account ID:");
+        mainlabel = new JLabel("Please enter your account ID:");
         mainlabel.setPreferredSize(new Dimension(430, 70));
         mainlabel.setFont(new Font("sans-serif", Font.BOLD, 30));
-        this.mainlabel = mainlabel;
         
         ls.add(mainlabel);
         ls.add(textField = makeIDField());
@@ -163,12 +180,12 @@ public class ATMGUI extends JFrame {
     private JPanel makeLoginScreen2() {
         JPanel ls = new JPanel();
         ls.setPreferredSize(new Dimension(450, 500));
-        ls.setBorder(BorderFactory.createLineBorder(Color.black));
+        ls.setBorder(BORDER_SCREEN);
 
-        JLabel mainlabel = new JLabel("Please enter your PIN:");
+        mainlabel = new JLabel("Please enter your PIN:");
         mainlabel.setPreferredSize(new Dimension(430, 70));
         mainlabel.setFont(new Font("sans-serif", Font.BOLD, 30));
-        this.mainlabel = mainlabel;
+        
         ls.add(mainlabel);
         ls.add(passwordField = makePasswordField());
         return ls;
@@ -177,7 +194,7 @@ public class ATMGUI extends JFrame {
     private JPanel makeHomeScreen() {
         JPanel hs = new JPanel();
         hs.setPreferredSize(new Dimension(450, 500));
-        hs.setBorder(BorderFactory.createLineBorder(Color.black));
+        hs.setBorder(BORDER_SCREEN);
         
         Font labelFont = new Font("sans-serif", 0, 40);
 
@@ -204,8 +221,7 @@ public class ATMGUI extends JFrame {
         JButton[] numberBtns = new JButton[10];
         JPanel sb = new JPanel();
         sb.setPreferredSize(new Dimension(250, 500));
-        //sidebar.setBackground(Color.red);
-        sb.setBorder(BorderFactory.createLineBorder(Color.black));
+        //sb.setBorder(BORDER_LINE);
 
         GridLayout grid = new GridLayout(5, 3);
         sb.setLayout(grid);
@@ -254,25 +270,25 @@ public class ATMGUI extends JFrame {
                 System.out.println("HOME -> " + activeWindow);
                 switch (b.getText()) {
                 case "1":
+                    setWindow(SCR_BALANCE);
                     break;
                 case "2":
-                    changeWindow(SCR_DEPOSIT);
+                    setWindow(SCR_DEPOSIT);
                     break;
                 case "3":
-                    changeWindow("withdraw");
+                    setWindow(SCR_WITHDRAW);
                     break;
                 case "4":
                     atm.close();
-                    changeWindow(SCR_LOGIN_1);
+                    setWindow(SCR_LOGIN_1);
                     break;
                 }
                 break;
             case SCR_DEPOSIT:
-                String temp = valuestr + b.getText();
+                if (valuestr.length() == 0 && b.getText().equals("0"))
+                    break;
                 valuestr += b.getText();
-                System.out.println(temp);
-                temp = ATM.formatCash(temp);
-                cashField.setText(temp);
+                cashField.setText(ATM.formatCash(valuestr));
                 break;
             }
         };
@@ -285,18 +301,16 @@ public class ATMGUI extends JFrame {
             switch (activeWindow) {
             case SCR_LOGIN_1:
                 if (atm.validateID(textField.getText())) {
-                    changeWindow(SCR_LOGIN_2);
+                    setWindow(SCR_LOGIN_2);
                 } else {
                     System.out.println("BAD ACCOUNT");
                 }
                 break;
             case SCR_LOGIN_2:
                 if (atm.validatePIN(new String(passwordField.getPassword()))) {
-                    loginscreen1.removeAll();
-                    loginscreen1.setVisible(false);
-                    changeWindow(SCR_HOME);
+                    setWindow(SCR_HOME);
                 } else {
-                    changeWindow(SCR_LOGIN_1);
+                    setWindow(SCR_LOGIN_1);
                 }
                 break;
             case SCR_DEPOSIT:
@@ -304,9 +318,17 @@ public class ATMGUI extends JFrame {
                 if (atm.deposit(cash)) {
                     System.out.println("SUCCESS");
                     System.out.println(atm.balance());
+                    valuestr = "";
+                    setWindow(SCR_DEPOSIT_OK);
                 } else {
                     System.out.println("NO MONEY HERE");
                 }
+                break;
+            case SCR_DEPOSIT_OK:
+                setWindow(SCR_HOME);
+                break;
+            case SCR_BALANCE:
+                setWindow(SCR_HOME);
                 break;
             }
             buttonPressed("OK");
@@ -314,14 +336,11 @@ public class ATMGUI extends JFrame {
         
         buttcancel.addActionListener(e -> {
             switch (activeWindow) {
-            case SCR_LOGIN_1:
-                break;
             case SCR_LOGIN_2:
-                changeWindow(SCR_LOGIN_1);
+                setWindow(SCR_LOGIN_1);
                 break;
             case SCR_DEPOSIT:
-                frame.remove(depositscreen);
-                changeWindow(SCR_HOME);
+                setWindow(SCR_HOME);
                 break;
             }
             buttonPressed("CANCEL");
@@ -334,6 +353,9 @@ public class ATMGUI extends JFrame {
             case SCR_LOGIN_2:
                 passwordField.setText("");
                 break;
+            case SCR_DEPOSIT:
+                cashField.setText("$0.00");
+                valuestr = "";
             }
             buttonPressed("CLEAR");
         });
@@ -346,7 +368,7 @@ public class ATMGUI extends JFrame {
     private JPanel makeDepositScreen() {
         JPanel ds = new JPanel();
         ds.setPreferredSize(new Dimension(450,500));
-        ds.setBorder(BorderFactory.createLineBorder(Color.black));
+        ds.setBorder(BORDER_SCREEN);
         ds.setLayout(new FlowLayout());
 
         JLabel msg = new JLabel("Enter an amount to deposit:");
@@ -365,7 +387,7 @@ public class ATMGUI extends JFrame {
         f.setSize(300, 70);
         f.setBounds(0, 200, 300, 70);
         f.setFont(new Font("sans-serif", Font.BOLD, 30));
-        f.setText("$");
+        f.setText("$0.00");
         return f;
     }
     
@@ -391,4 +413,42 @@ public class ATMGUI extends JFrame {
         pass.setFont(new Font("sans-serif", Font.BOLD, 30));
         return pass;
     }
+    
+    private JPanel makeBalanceViewScreen() {
+        JPanel bvs = new JPanel();
+        bvs.setPreferredSize(new Dimension(450,500));
+        
+        bvs.setLayout(new BoxLayout(bvs, BoxLayout.Y_AXIS));
+        bvs.setBorder(BORDER_SCREEN);
+        
+        JLabel balTitle = new JLabel("Current Balance:");
+        balTitle.setPreferredSize(new Dimension(430, 70));
+        balTitle.setFont(new Font("sans-serif", 0, 30));
+        
+        JLabel balVal = new JLabel(Account.formatCash(atm.balance()));
+        balVal.setPreferredSize(new Dimension(430, 70));
+        balVal.setFont(new Font("sans-serif", 0, 30));
+        
+        bvs.add(balTitle);
+        bvs.add(balVal);
+        
+        return bvs;
+    }
+    
+    private JPanel makeDepositConfirmScreen() {
+        JPanel dcs = new JPanel();
+        dcs.setPreferredSize(new Dimension(450,500));
+
+        dcs.setLayout(new BoxLayout(dcs, BoxLayout.Y_AXIS));
+        dcs.setBorder(BORDER_SCREEN);
+        
+        JLabel lab = new JLabel("Deposit successful.");
+        lab.setPreferredSize(new Dimension(430, 70));
+        lab.setFont(new Font("sans-serif", 0, 30));
+
+        dcs.add(lab);
+
+        return dcs;
+    }
+    
 }

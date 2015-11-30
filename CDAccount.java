@@ -52,7 +52,7 @@ public class CDAccount extends Account {
 
     @Override
     public synchronized String toString() {
-        return "Certificate of deposit account #" + getID() + " has balance " + formatCash(getBalance());
+        return "Certificate of deposit account " + getID() + " has balance " + formatCash(getBalance());
     }
     
     @Override
