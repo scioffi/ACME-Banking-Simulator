@@ -8,7 +8,6 @@ import java.util.Observer;
 public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
-    public String[] windows = {"login1","login2","home","message","balance","deposit","widthdraw"};
 
     public ATM(Bank b) {
         bank = b;
@@ -47,39 +46,32 @@ public class ATM extends Observable implements Observer {
         this.notifyObservers();
     }
 
-    public String formatCash(String numbers){
-        String temp = "";
-        if(numbers.length() == 1){
-            temp += "0.0" + numbers;
-        }
-        else if(numbers.length() == 2){
-            temp += "0."+ numbers;
-        }
-        else{
-            temp += numbers.substring(0,numbers.length()-2) + "." + numbers.substring(numbers.length()-2,numbers.length());
-        }
-        return "$" + temp;
+    public static String formatCash(String numbers) {
+        return "$" + digitsToCash(numbers);
     }
     
-    public double returnCash(String str) {
-        return Double.parseDouble(str.substring(1,str.length()));
+    public static String digitsToCash(String numbers) {
+        String temp = "";
+        if (numbers.length() == 0) {
+            temp = "0.00";
+        } else if (numbers.length() == 1) {
+            temp += "0.0" + numbers;
+        } else if(numbers.length() == 2) {
+            temp += "0." + numbers;
+        } else {
+            temp += numbers.substring(0, numbers.length()-2) + 
+                    "." + 
+                    numbers.substring(numbers.length()-2, numbers.length());
+        }
+        return temp;
     }
 
-    public boolean deposit(Double cash){
+    public boolean deposit(Double cash) {
         return account.deposit(cash);
     }
 
-    public double balance(){
+    public double balance() {
         return account.getBalance();
-    }
-
-    public boolean doesWindowExist(String window){
-        for(int i = 0; i < windows.length; i++){
-            if(windows[i].equals(window)){
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void main(String[] args) {

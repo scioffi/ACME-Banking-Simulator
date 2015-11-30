@@ -31,6 +31,7 @@ public class BankGUI extends JFrame implements Observer {
     
     public BankGUI(Bank bank) {
 
+        /*
         // try to make the window match the look of the current platform
         try {
             // Set System L&F
@@ -43,6 +44,7 @@ public class BankGUI extends JFrame implements Observer {
             // handle exception
             // do nothing
         }
+         */
         
         this.bank = bank;
         bank.addObserver(this);
