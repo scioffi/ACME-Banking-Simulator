@@ -22,7 +22,6 @@ public class ATMGUI extends JFrame {
     private static final String SCR_WITHDRAW = "withdraw";
     private static final String SCR_DEPOSIT_OK = "deposit_ok";
 
-    private static final Border BORDER_LINE = BorderFactory.createLineBorder(Color.BLACK);
     private static final Border BORDER_SUNKEN = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
     private static final Border BORDER_SCREEN = BORDER_SUNKEN;
     
