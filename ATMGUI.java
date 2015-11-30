@@ -141,8 +141,8 @@ public class ATMGUI extends JFrame {
     }
     
     private void removeAllComponents(JFrame f) {
-        while (f.getComponentCount() > 0)
-            f.remove(f.getComponent(0));
+        while (f.getContentPane().getComponentCount() > 0)
+            f.remove(f.getContentPane().getComponent(0));
     }
 
     private JPanel makeLoginScreen1() {
@@ -371,6 +371,7 @@ public class ATMGUI extends JFrame {
     
     private JTextField makeIDField() {
         JTextField idf = new JTextField();
+        idf.setHorizontalAlignment(JTextField.CENTER);
         idf.setEditable(false);
         idf.setPreferredSize(new Dimension(300, 70));
         idf.setSize(300, 70);
@@ -382,6 +383,7 @@ public class ATMGUI extends JFrame {
     private JPasswordField makePasswordField() {
         // NOTE: for some reason, you need to add one to the JPasswordField arg to display all characters properly
         JPasswordField pass = new JPasswordField(7);
+        pass.setHorizontalAlignment(JTextField.CENTER);
         pass.setEditable(false);
         pass.setPreferredSize(new Dimension(300, 70));
         pass.setSize(300, 70);
