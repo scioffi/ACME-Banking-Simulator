@@ -66,8 +66,15 @@ public class ATM extends Observable implements Observer {
         return temp;
     }
 
-    public boolean deposit(Double cash) {
+    public boolean deposit(double cash) {
         return account.deposit(cash);
+    }
+    
+    public boolean withdraw(double cash) {
+        if (account instanceof Withdrawable) {
+            return ((Withdrawable)(account)).withdraw(cash);
+        }
+        return false;
     }
 
     public double balance() {

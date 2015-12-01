@@ -10,6 +10,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class ATMGUI extends JFrame {
@@ -40,14 +41,14 @@ public class ATMGUI extends JFrame {
     private JPanel sidebar;
     private JPanel homescreen;
     private JPanel depositscreen;
+    private JPanel withdrawscreen;
     private JPanel depositokscreen;
     private JPanel withdrawokscreen;
     private JPanel withdrawfailscreen;
     
     private String valuestr = "";
-
+    
     public ATMGUI(ATM atm, long ATMID) {
-        
         /*
         // try to make the window match the look of the current platform
         try {
@@ -72,7 +73,8 @@ public class ATMGUI extends JFrame {
         this.homescreen = makeHomeScreen();
         this.loginscreen1 = makeLoginScreen1();
         this.loginscreen2 = makeLoginScreen2();
-        this.depositscreen = makeDepositScreen();
+        this.depositscreen = makeTransactionScreen("Enter an amount to deposit:");
+        this.withdrawscreen = makeTransactionScreen("Enter an amount to withdraw:");
         this.depositokscreen = makeResultScreen("Deposit successful.");
         this.withdrawokscreen = makeResultScreen("Withdraw sucessful.");
         this.withdrawfailscreen = makeResultScreen("Withdraw failed. Insufficient funds.");
@@ -81,6 +83,13 @@ public class ATMGUI extends JFrame {
 
         this.setLayout(flow);
 
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                close();
+            }
+        });
+        
         setWindow(SCR_LOGIN_1);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -89,73 +98,54 @@ public class ATMGUI extends JFrame {
         this.setVisible(true);
     }
 
-    private void buttonPressed(String str) {
-        switch(str) {
-            case "OK":
-                System.out.println(str);
-                break;
-            case "CANCEL":
-                System.out.println(str);
-                break;
-            case "CLEAR":
-                System.out.println(str);
-                break;
-            case "CLOSE":
-                System.out.println(str);
-                close();
-                break;
-        }
-    }
-
     private void setWindow(String window) {
         removeAllComponents();
         switch (window) {
             case SCR_LOGIN_1:
                 add(loginscreen1, BorderLayout.WEST);
-                add(sidebar, BorderLayout.EAST);
                 textField.setText("");
                 break;
 
             case SCR_LOGIN_2:
                 add(loginscreen2, BorderLayout.WEST);
-                add(sidebar, BorderLayout.EAST);
                 passwordField.setText("");
                 break;
 
             case SCR_HOME:
                 add(homescreen, BorderLayout.WEST);
-                add(sidebar, BorderLayout.EAST);
                 break;
             
             case SCR_DEPOSIT:
                 add(depositscreen, BorderLayout.WEST);
-                add(sidebar, BorderLayout.EAST);
                 cashField.setText("$0.00");
                 valuestr = "";
                 break;
             
             case SCR_DEPOSIT_OK:
                 add(depositokscreen, BorderLayout.WEST);
-                add(sidebar, BorderLayout.EAST);
                 break;
             
             case SCR_BALANCE:
                 add(makeBalanceViewScreen(), BorderLayout.WEST);
-                add(sidebar, BorderLayout.EAST);
                 break;
             
             case SCR_WITHDRAW_OK:
-                
+                add(withdrawokscreen, BorderLayout.WEST);
+                break;
                 
             case SCR_WITHDRAW_FAIL:
+                add(withdrawfailscreen, BorderLayout.WEST);
+                break;
                 
             case SCR_WITHDRAW:
+                add(withdrawscreen, BorderLayout.WEST);
+                break;
                 
             default:
-                System.out.println("oops, that window doesn't exist");
                 setWindow(activeWindow);
                 return;
         }
+        add(sidebar, BorderLayout.EAST);
         activeWindow = window;
         render();
     }
@@ -164,7 +154,6 @@ public class ATMGUI extends JFrame {
         atm.deleteObservers();  // remove dangling references to observer objects for garbage collection
         atm.closeAll();
         atm = null;
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
     
     private void removeAllComponents() {
@@ -234,7 +223,6 @@ public class ATMGUI extends JFrame {
         JButton[] numberBtns = new JButton[10];
         JPanel sb = new JPanel();
         sb.setPreferredSize(new Dimension(250, 500));
-        //sb.setBorder(BORDER_LINE);
 
         GridLayout grid = new GridLayout(5, 3);
         sb.setLayout(grid);
@@ -279,7 +267,6 @@ public class ATMGUI extends JFrame {
                 passwordField.setText(s + b.getText());
                 break;
             case SCR_HOME:
-                System.out.println("HOME -> " + activeWindow);
                 switch (b.getText()) {
                 case "1":
                     setWindow(SCR_BALANCE);
@@ -291,11 +278,12 @@ public class ATMGUI extends JFrame {
                     setWindow(SCR_WITHDRAW);
                     break;
                 case "4":
-                    atm.close();
+                    close();
                     setWindow(SCR_LOGIN_1);
                     break;
                 }
                 break;
+            case SCR_WITHDRAW:
             case SCR_DEPOSIT:
                 if (valuestr.length() == 0 && b.getText().equals("0"))
                     break;
@@ -314,8 +302,6 @@ public class ATMGUI extends JFrame {
             case SCR_LOGIN_1:
                 if (atm.validateID(textField.getText())) {
                     setWindow(SCR_LOGIN_2);
-                } else {
-                    System.out.println("BAD ACCOUNT");
                 }
                 break;
             case SCR_LOGIN_2:
@@ -326,24 +312,29 @@ public class ATMGUI extends JFrame {
                 }
                 break;
             case SCR_DEPOSIT:
-                double cash = Double.parseDouble(ATM.digitsToCash(valuestr));
-                if (atm.deposit(cash)) {
-                    System.out.println("SUCCESS");
-                    System.out.println(atm.balance());
+                double depcash = Double.parseDouble(ATM.digitsToCash(valuestr));
+                if (atm.deposit(depcash)) {
                     valuestr = "";
                     setWindow(SCR_DEPOSIT_OK);
+                }
+                break;
+            case SCR_WITHDRAW:
+                double withcash = Double.parseDouble(ATM.digitsToCash(valuestr));
+                if (atm.withdraw(withcash)) {
+                    valuestr = "";
+                    setWindow(SCR_WITHDRAW_OK);
                 } else {
-                    System.out.println("NO MONEY HERE");
+                    valuestr = "";
+                    setWindow(SCR_WITHDRAW_FAIL);
                 }
                 break;
             case SCR_DEPOSIT_OK:
-                setWindow(SCR_HOME);
-                break;
             case SCR_BALANCE:
+            case SCR_WITHDRAW_OK:
+            case SCR_WITHDRAW_FAIL:
                 setWindow(SCR_HOME);
                 break;
             }
-            buttonPressed("OK");
         });
         
         buttcancel.addActionListener(e -> {
@@ -351,11 +342,11 @@ public class ATMGUI extends JFrame {
             case SCR_LOGIN_2:
                 setWindow(SCR_LOGIN_1);
                 break;
+            case SCR_WITHDRAW:
             case SCR_DEPOSIT:
                 setWindow(SCR_HOME);
                 break;
             }
-            buttonPressed("CANCEL");
         });
         
         buttclear.addActionListener(e -> {
@@ -365,29 +356,27 @@ public class ATMGUI extends JFrame {
             case SCR_LOGIN_2:
                 passwordField.setText("");
                 break;
+            case SCR_WITHDRAW:
             case SCR_DEPOSIT:
                 cashField.setText("$0.00");
                 valuestr = "";
             }
-            buttonPressed("CLEAR");
         });
-        
-        buttclose.addActionListener(e -> buttonPressed("CLOSE"));
         
         return sb;
     }
     
-    private JPanel makeDepositScreen() {
+    private JPanel makeTransactionScreen(String msg) {
         JPanel ds = new JPanel();
         ds.setPreferredSize(new Dimension(450,500));
         ds.setBorder(BORDER_SCREEN);
         ds.setLayout(new FlowLayout());
 
-        JLabel msg = new JLabel("Enter an amount to deposit:");
-        msg.setPreferredSize(new Dimension(430, 70));
-        msg.setFont(new Font("sans-serif", 0, 30));
+        JLabel lmsg = new JLabel(msg);
+        lmsg.setPreferredSize(new Dimension(430, 70));
+        lmsg.setFont(new Font("sans-serif", 0, 30));
         cashField = makeCashField();
-        ds.add(msg);
+        ds.add(lmsg);
         ds.add(cashField);
         return ds;
     }

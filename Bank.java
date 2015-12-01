@@ -216,7 +216,7 @@ public class Bank extends Observable implements Observer {
         /*
          * bankfile format:
          *      one account per line: <id> <type> <pin> <balance>
-         *      <type> is CHK, SAV, or COD
+         *      <type> is a character constant
          */
         boolean withoutError = true;
         ArrayList<String> lines = getLinesFromFile(bankFile);
