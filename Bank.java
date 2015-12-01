@@ -42,6 +42,8 @@ public class Bank extends Observable implements Observer {
         fillFromFile();
         if (batchFile != null) {    // if batch commands are provided, execute them
             batchProcess(batchFile);
+            printSummary();
+            save();
         }
     }
 
@@ -93,7 +95,6 @@ public class Bank extends Observable implements Observer {
             }
             triggerUpdate();
         }
-        printSummary();
     }
 
     /**

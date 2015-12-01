@@ -81,6 +81,7 @@ public class BankGUI extends JFrame implements Observer {
             @Override
             public void windowClosing(WindowEvent e) {
                 bank.printSummary();
+                bank.save();
                 super.windowClosing(e);
             }
         });

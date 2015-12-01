@@ -21,6 +21,8 @@ public class ATMGUI extends JFrame {
     private static final String SCR_BALANCE = "balance";
     private static final String SCR_WITHDRAW = "withdraw";
     private static final String SCR_DEPOSIT_OK = "deposit_ok";
+    private static final String SCR_WITHDRAW_OK = "withdraw_ok";
+    private static final String SCR_WITHDRAW_FAIL = "withdraw_fail";
 
     private static final Border BORDER_SUNKEN = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
     private static final Border BORDER_SCREEN = BORDER_SUNKEN;
@@ -39,6 +41,8 @@ public class ATMGUI extends JFrame {
     private JPanel homescreen;
     private JPanel depositscreen;
     private JPanel depositokscreen;
+    private JPanel withdrawokscreen;
+    private JPanel withdrawfailscreen;
     
     private String valuestr = "";
 
@@ -69,8 +73,10 @@ public class ATMGUI extends JFrame {
         this.loginscreen1 = makeLoginScreen1();
         this.loginscreen2 = makeLoginScreen2();
         this.depositscreen = makeDepositScreen();
-        this.depositokscreen = makeDepositConfirmScreen();
-
+        this.depositokscreen = makeResultScreen("Deposit successful.");
+        this.withdrawokscreen = makeResultScreen("Withdraw sucessful.");
+        this.withdrawfailscreen = makeResultScreen("Withdraw failed. Insufficient funds.");
+        
         FlowLayout flow = new FlowLayout();
 
         this.setLayout(flow);
@@ -138,6 +144,13 @@ public class ATMGUI extends JFrame {
                 add(sidebar, BorderLayout.EAST);
                 break;
             
+            case SCR_WITHDRAW_OK:
+                
+                
+            case SCR_WITHDRAW_FAIL:
+                
+            case SCR_WITHDRAW:
+                
             default:
                 System.out.println("oops, that window doesn't exist");
                 setWindow(activeWindow);
@@ -251,7 +264,6 @@ public class ATMGUI extends JFrame {
         }
 
         buttok.setFont(new Font("sans-serif", Font.BOLD, 30));
-        buttok.setBackground(Color.GREEN);
         buttcancel.setFont(new Font("sans-serif", Font.BOLD, 14));
         buttclear.setFont(new Font("sans-serif", Font.BOLD, 16));
         buttclose.setFont(new Font("sans-serif", Font.BOLD, 16));
@@ -416,7 +428,7 @@ public class ATMGUI extends JFrame {
     
     private JPanel makeBalanceViewScreen() {
         JPanel bvs = new JPanel();
-        bvs.setPreferredSize(new Dimension(450,500));
+        bvs.setPreferredSize(new Dimension(450, 500));
         
         bvs.setLayout(new BoxLayout(bvs, BoxLayout.Y_AXIS));
         bvs.setBorder(BORDER_SCREEN);
@@ -435,14 +447,14 @@ public class ATMGUI extends JFrame {
         return bvs;
     }
     
-    private JPanel makeDepositConfirmScreen() {
+    private JPanel makeResultScreen(String msg) {
         JPanel dcs = new JPanel();
-        dcs.setPreferredSize(new Dimension(450,500));
+        dcs.setPreferredSize(new Dimension(450, 500));
 
         dcs.setLayout(new BoxLayout(dcs, BoxLayout.Y_AXIS));
         dcs.setBorder(BORDER_SCREEN);
         
-        JLabel lab = new JLabel("Deposit successful.");
+        JLabel lab = new JLabel(msg);
         lab.setPreferredSize(new Dimension(430, 70));
         lab.setFont(new Font("sans-serif", 0, 30));
 
