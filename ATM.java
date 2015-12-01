@@ -8,6 +8,7 @@ import java.util.Observer;
 public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
+    private long id;
 
     public ATM(Bank b, long ATMID) {
         bank = b;
