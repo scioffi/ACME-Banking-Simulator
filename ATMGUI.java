@@ -47,26 +47,15 @@ public class ATMGUI extends JFrame {
     private JPanel withdrawfailscreen;
     
     private String valuestr = "";
-    
-    public ATMGUI(ATM atm, long ATMID) {
-        /*
-        // try to make the window match the look of the current platform
-        try {
-            // Set System L&F
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException |
-                IllegalAccessException |
-                ClassNotFoundException |
-                InstantiationException e) {
-            // handle exception
-            // by doing nothing
-        }
-        */
-        
+
+    /**
+     * Creates an ATM GUI and displays the login screen.
+     * @param atm The ATM model this GUI should reflect
+     */
+    public ATMGUI(ATM atm) {
         this.atm = atm;
         
-        this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM ID: " + ATMID);
+        this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM ID: " + atm.getATMID());
         this.setSize(700, 500);
 
         this.sidebar = makeSidebar();

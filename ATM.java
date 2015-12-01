@@ -8,11 +8,17 @@ import java.util.Observer;
 public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
+    private long id;
 
-    public ATM(Bank b) {
+    public ATM(Bank b, long ATMID) {
         bank = b;
+        id = ATMID;
     }
 
+    public long getATMID() {
+        return id;
+    }
+    
     public boolean validateID(String id) {
         Account a = bank.getAccount(id);
         if (a == null) {
@@ -79,10 +85,6 @@ public class ATM extends Observable implements Observer {
 
     public double balance() {
         return account.getBalance();
-    }
-
-    public static void main(String[] args) {
-        new ATM(new Bank("test.txt", null));
     }
 
     @Override

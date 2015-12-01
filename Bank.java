@@ -361,24 +361,23 @@ public class Bank extends Observable implements Observer {
      * Writes account data to bank file.
      * NOTE: If a 0 is present as the second decimal value, it will be omitted.
      */
-    public void save(){
+    public void save() {
         try {
             FileWriter fw = new FileWriter(bankFile);
-            for(Account a : accounts){
+            for (Account a : accounts) {
                 String type;
-                if(a instanceof SavingsAccount){
+                if (a instanceof SavingsAccount) {
                     type = "s";
-                } else if(a instanceof CheckingAccount){
+                } else if (a instanceof CheckingAccount) {
                     type = "x";
-                }
-                else{
+                } else {
                     type = "c";
                 }
                 fw.write(a.getID() + " " + type + " " + a.getPIN() + " " + a.getBalance() + "\n");
             }
             fw.close();
-        } catch(IOException e){
-            System.err.println("ERROR: Unable to write to file. Please contact your system administrator.");
+        } catch (IOException e) {
+            //System.err.println("ERROR: Unable to write to file. Please contact your system administrator.");
         }
     }
 

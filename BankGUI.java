@@ -30,22 +30,6 @@ public class BankGUI extends JFrame implements Observer {
     private JButton btnUpdate;
     
     public BankGUI(Bank bank) {
-
-        /*
-        // try to make the window match the look of the current platform
-        try {
-            // Set System L&F
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException |
-                IllegalAccessException |
-                ClassNotFoundException |
-                InstantiationException e) {
-            // handle exception
-            // do nothing
-        }
-         */
-        
         this.bank = bank;
         bank.addObserver(this);
         
@@ -90,10 +74,10 @@ public class BankGUI extends JFrame implements Observer {
     }
     
     private void newATM() {
-        ATM atm = new ATM(bank);
         new Thread() {
             public void run() {
-                new ATMGUI(atm, this.getId());
+                ATM atm = new ATM(bank, this.getId());
+                new ATMGUI(atm);
             }
         }.start();
     }
