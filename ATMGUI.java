@@ -29,7 +29,7 @@ public class ATMGUI extends JFrame {
     private static final Border BORDER_SCREEN = BORDER_SUNKEN;
     
     private String activeWindow = SCR_LOGIN_1;
-    private ATM atm;
+    private final ATM atm;
     private JLabel mainlabel;
     
     private JPasswordField passwordField;
@@ -80,9 +80,9 @@ public class ATMGUI extends JFrame {
         this.withdrawfailscreen = makeResultScreen("Withdraw failed. Insufficient funds.");
         
         FlowLayout flow = new FlowLayout();
-
+        
         this.setLayout(flow);
-
+        
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -105,30 +105,30 @@ public class ATMGUI extends JFrame {
                 add(loginscreen1, BorderLayout.WEST);
                 textField.setText("");
                 break;
-
+                
             case SCR_LOGIN_2:
                 add(loginscreen2, BorderLayout.WEST);
                 passwordField.setText("");
                 break;
-
+                
             case SCR_HOME:
                 add(homescreen, BorderLayout.WEST);
                 break;
-            
+                
             case SCR_DEPOSIT:
                 add(depositscreen, BorderLayout.WEST);
                 cashField.setText("$0.00");
                 valuestr = "";
                 break;
-            
+                
             case SCR_DEPOSIT_OK:
                 add(depositokscreen, BorderLayout.WEST);
                 break;
-            
+                
             case SCR_BALANCE:
                 add(makeBalanceViewScreen(), BorderLayout.WEST);
                 break;
-            
+                
             case SCR_WITHDRAW_OK:
                 add(withdrawokscreen, BorderLayout.WEST);
                 break;
@@ -153,7 +153,6 @@ public class ATMGUI extends JFrame {
     public void close() {
         atm.deleteObservers();  // remove dangling references to observer objects for garbage collection
         atm.closeAll();
-        atm = null;
     }
     
     private void removeAllComponents() {
@@ -362,6 +361,8 @@ public class ATMGUI extends JFrame {
                 valuestr = "";
             }
         });
+        
+        buttclose.addActionListener( e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSED)));
         
         return sb;
     }
