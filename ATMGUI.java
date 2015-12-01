@@ -24,7 +24,7 @@ public class ATMGUI extends JFrame {
     private static final String SCR_DEPOSIT_OK = "deposit_ok";
     private static final String SCR_WITHDRAW_OK = "withdraw_ok";
     private static final String SCR_WITHDRAW_FAIL = "withdraw_fail";
-
+    
     private static final Border BORDER_SUNKEN = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
     private static final Border BORDER_SCREEN = BORDER_SUNKEN;
     
@@ -35,7 +35,7 @@ public class ATMGUI extends JFrame {
     private JPasswordField passwordField;
     private JTextField cashField;
     private JTextField textField;
-
+    
     private JPanel loginscreen1;
     private JPanel loginscreen2;
     private JPanel sidebar;
@@ -47,7 +47,7 @@ public class ATMGUI extends JFrame {
     private JPanel withdrawfailscreen;
     
     private String valuestr = "";
-
+    
     /**
      * Creates an ATM GUI and displays the login screen.
      * @param atm The ATM model this GUI should reflect
@@ -75,7 +75,7 @@ public class ATMGUI extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                close();
+                atm.closeAll();
             }
         });
         
@@ -86,7 +86,11 @@ public class ATMGUI extends JFrame {
         this.pack();
         this.setVisible(true);
     }
-
+    
+    /**
+     * Changes the window shown in the ATM screen.
+     * @param window Identifier of the new window
+     */
     private void setWindow(String window) {
         removeAllComponents();
         switch (window) {
@@ -139,11 +143,9 @@ public class ATMGUI extends JFrame {
         render();
     }
 
-    public void close() {
-        atm.deleteObservers();  // remove dangling references to observer objects for garbage collection
-        atm.closeAll();
-    }
-    
+    /**
+     * Removes all components from this frame 
+     */
     private void removeAllComponents() {
         getContentPane().removeAll();
     }
@@ -152,7 +154,7 @@ public class ATMGUI extends JFrame {
         validate();
         repaint();
     }
-
+    
     private JPanel makeLoginScreen1() {
         JPanel ls = new JPanel();
         ls.setPreferredSize(new Dimension(450, 500));
@@ -171,7 +173,7 @@ public class ATMGUI extends JFrame {
         JPanel ls = new JPanel();
         ls.setPreferredSize(new Dimension(450, 500));
         ls.setBorder(BORDER_SCREEN);
-
+        
         mainlabel = new JLabel("Please enter your PIN:");
         mainlabel.setPreferredSize(new Dimension(430, 70));
         mainlabel.setFont(new Font("sans-serif", Font.BOLD, 30));
@@ -187,7 +189,7 @@ public class ATMGUI extends JFrame {
         hs.setBorder(BORDER_SCREEN);
         
         Font labelFont = new Font("sans-serif", 0, 40);
-
+        
         JLabel l1 = new JLabel("1) Balance Inquiry");
         l1.setFont(labelFont);
         JLabel l2 = new JLabel("2) Deposit Money");
@@ -196,9 +198,9 @@ public class ATMGUI extends JFrame {
         l3.setFont(labelFont);
         JLabel l4 = new JLabel("4) Log Off");
         l4.setFont(labelFont);
-
+        
         hs.setLayout(new BoxLayout(hs, BoxLayout.Y_AXIS));
-
+        
         hs.add(l1);
         hs.add(l2);
         hs.add(l3);
@@ -232,13 +234,13 @@ public class ATMGUI extends JFrame {
         sb.add(buttclear);
         sb.add(new JPanel());
         sb.add(buttclose);
-
+        
         Font numberFont = new Font("sans-serif", Font.BOLD, 50);
-
+        
         for (int i = 0; i < 10; i++) {
             numberBtns[i].setFont(numberFont);
         }
-
+        
         buttok.setFont(new Font("sans-serif", Font.BOLD, 30));
         buttcancel.setFont(new Font("sans-serif", Font.BOLD, 14));
         buttclear.setFont(new Font("sans-serif", Font.BOLD, 16));
@@ -266,7 +268,7 @@ public class ATMGUI extends JFrame {
                     setWindow(SCR_WITHDRAW);
                     break;
                 case "4":
-                    close();
+                    atm.close();
                     setWindow(SCR_LOGIN_1);
                     break;
                 }

@@ -18,7 +18,6 @@ public class ATM extends Observable implements Observer {
     public long getATMID() {
         return id;
     }
-    
 
     /**
      * Verify whether or not account ID exists.
