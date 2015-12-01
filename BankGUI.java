@@ -21,31 +21,19 @@ import java.util.Observer;
 public class BankGUI extends JFrame implements Observer {
     
     private Bank bank;
-    
+
     private JTextArea text;
     private JScrollPane listScrollPane;
     
     private JPanel panelOfButtons;
     private JButton btnATM;
     private JButton btnUpdate;
-    
-    public BankGUI(Bank bank) {
 
-        /*
-        // try to make the window match the look of the current platform
-        try {
-            // Set System L&F
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException |
-                IllegalAccessException |
-                ClassNotFoundException |
-                InstantiationException e) {
-            // handle exception
-            // do nothing
-        }
-         */
-        
+    /**
+     * Create a new instance of a BankGUI interface.
+     * @param bank Bank object
+     */
+    public BankGUI(Bank bank) {
         this.bank = bank;
         bank.addObserver(this);
         
@@ -88,7 +76,10 @@ public class BankGUI extends JFrame implements Observer {
         
         this.setVisible(true);
     }
-    
+
+    /**
+     * Create and launch a new ATM and ATMGUI instance.
+     */
     private void newATM() {
         ATM atm = new ATM(bank);
         new Thread() {
@@ -97,7 +88,10 @@ public class BankGUI extends JFrame implements Observer {
             }
         }.start();
     }
-    
+
+    /**
+     * Update BankGUI interface with updated account information.
+     */
     private void refresh() {
         StringBuilder sb = new StringBuilder();
         ArrayList<Account> accts = bank.getAccounts();
@@ -106,7 +100,12 @@ public class BankGUI extends JFrame implements Observer {
         }
         text.setText(sb.toString());
     }
-    
+
+    /**
+     * When a change is observed, update the GUI.
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         refresh();
