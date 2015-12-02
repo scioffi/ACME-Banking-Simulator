@@ -35,8 +35,6 @@ separating the UI "view" code from the back-end game "model".
 	updates are passed up the ladder to the GUI. For example, the ATM GUI displays information from an ATM model,
 	which listens to a logged-in account.
 
-	$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
 3. Implementation and Testing
 -------------------
 
