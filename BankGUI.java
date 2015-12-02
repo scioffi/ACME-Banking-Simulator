@@ -42,7 +42,7 @@ public class BankGUI extends JFrame implements Observer {
         
         text = new JTextArea();
         text.setLineWrap(false);
-        text.setEditable(false);
+        text.setEditable(false); // Prevent textfield from being editable by users.
         
         listScrollPane = new JScrollPane(text);
         this.getContentPane().add(listScrollPane, BorderLayout.CENTER);
@@ -63,13 +63,13 @@ public class BankGUI extends JFrame implements Observer {
         
         this.update(null, null);
         
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE); // Close the frame and temrinate the thread on close.
         
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 bank.printSummary();
-                bank.save();
+                bank.save(); // Flush data to disk.
                 super.windowClosing(e);
             }
         });
@@ -83,8 +83,8 @@ public class BankGUI extends JFrame implements Observer {
     private void newATM() {
         new Thread() {
             public void run() {
-                ATM atm = new ATM(bank, this.getId());
-                new ATMGUI(atm);
+                ATM atm = new ATM(bank, this.getId()); // Create a new ATM with the thread ID acting as the unique identifier.
+                new ATMGUI(atm); // Launch a new instance of ATM.
             }
         }.start();
     }
@@ -94,7 +94,7 @@ public class BankGUI extends JFrame implements Observer {
      */
     private void refresh() {
         StringBuilder sb = new StringBuilder();
-        ArrayList<Account> accts = bank.getAccounts();
+        ArrayList<Account> accts = bank.getAccounts(); // List of accounts
         for (Account acct : accts) {
             sb.append(acct.toString()).append('\n');
         }
