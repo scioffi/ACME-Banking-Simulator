@@ -41,6 +41,7 @@ public class ATMGUI extends JFrame {
     private JPanel loginscreen2;
     private JPanel sidebar;
     private JPanel homescreen;
+    private JPanel homescreen_CD;
     private JPanel depositscreen;
     private JPanel withdrawscreen;
     private JPanel depositokscreen;
@@ -62,7 +63,8 @@ public class ATMGUI extends JFrame {
         this.depositCashField = makeCashField();
         this.withdrawCashField = makeCashField();
         this.sidebar = makeSidebar();
-        this.homescreen = makeHomeScreen();
+        this.homescreen = makeHomeScreen(true);
+        this.homescreen_CD = makeHomeScreen(false);
         this.loginscreen1 = makeLoginScreen1();
         this.loginscreen2 = makeLoginScreen2();
         this.depositscreen = makeTransactionScreen("Enter an amount to deposit:");
@@ -110,7 +112,11 @@ public class ATMGUI extends JFrame {
                 break;
                 
             case SCR_HOME:
-                add(homescreen, BorderLayout.WEST);
+                if (atm.canWithdraw()) {
+                    add(homescreen, BorderLayout.WEST);
+                } else {
+                    add(homescreen_CD, BorderLayout.WEST);
+                }
                 break;
                 
             case SCR_DEPOSIT:
@@ -156,12 +162,19 @@ public class ATMGUI extends JFrame {
     private void removeAllComponents() {
         getContentPane().removeAll();
     }
-    
+
+    /**
+     * Redraws the GUI so that all components appear updated.
+     */
     private void render() {
         validate();
         repaint();
     }
-    
+
+    /**
+     * Creates a login screen which prompts the user to enter an account ID.
+     * @return A login screen with an account field
+     */
     private JPanel makeLoginScreen1() {
         JPanel ls = new JPanel();
         ls.setPreferredSize(new Dimension(450, 500));
@@ -175,7 +188,11 @@ public class ATMGUI extends JFrame {
         ls.add(textField = makeIDField());
         return ls;
     }
-    
+
+    /**
+     * Creates a login screen which prompts the user to enter an account password.
+     * @return A login screen with a password field
+     */
     private JPanel makeLoginScreen2() {
         JPanel ls = new JPanel();
         ls.setPreferredSize(new Dimension(450, 500));
@@ -189,20 +206,25 @@ public class ATMGUI extends JFrame {
         ls.add(passwordField = makePasswordField());
         return ls;
     }
-    
-    private JPanel makeHomeScreen() {
+
+    private JPanel makeHomeScreen(boolean isWithdrawPossible) {
         JPanel hs = new JPanel();
         hs.setPreferredSize(new Dimension(450, 500));
         hs.setBorder(BORDER_SCREEN);
-        
+
         Font labelFont = new Font("sans-serif", 0, 40);
-        
+
         JLabel l1 = new JLabel("1) Balance Inquiry");
         l1.setFont(labelFont);
         JLabel l2 = new JLabel("2) Deposit Money");
         l2.setFont(labelFont);
         JLabel l3 = new JLabel("3) Withdraw Money");
         l3.setFont(labelFont);
+        
+        if (!isWithdrawPossible) {
+            l3.setForeground(Color.LIGHT_GRAY);
+        }
+        
         JLabel l4 = new JLabel("4) Log Off");
         l4.setFont(labelFont);
         
@@ -227,14 +249,16 @@ public class ATMGUI extends JFrame {
         for (int i = 0; i < 10; i++) {
             numberBtns[i] = new JButton(Integer.toString(i));
         }
+        
         JButton buttok = new JButton("OK");
         JButton buttcancel = new JButton("Cancel");
         JButton buttclear = new JButton("Clear");
         JButton buttclose = new JButton("Close");
-
+        
         for (int i = 1; i < 10; i++) {
             sb.add(numberBtns[i]);
         }
+        
         sb.add(buttok);
         sb.add(numberBtns[0]);
         sb.add(buttcancel);
@@ -272,7 +296,9 @@ public class ATMGUI extends JFrame {
                     setWindow(SCR_DEPOSIT);
                     break;
                 case "3":
-                    setWindow(SCR_WITHDRAW);
+                    if (atm.canWithdraw()) {
+                        setWindow(SCR_WITHDRAW);
+                    }
                     break;
                 case "4":
                     atm.close();
