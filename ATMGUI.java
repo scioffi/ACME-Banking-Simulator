@@ -309,6 +309,9 @@ public class ATMGUI extends JFrame {
                 if (atm.validateID(textField.getText())) {
                     setWindow(SCR_LOGIN_2);
                 }
+                else{
+                    textField.setText("");
+                }
                 break;
             case SCR_LOGIN_2:
                 if (atm.validatePIN(new String(passwordField.getPassword()))) {
