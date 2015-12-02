@@ -33,7 +33,8 @@ public class ATMGUI extends JFrame {
     private JLabel mainlabel;
     
     private JPasswordField passwordField;
-    private JTextField cashField;
+    private JTextField depositCashField;
+    private JTextField withdrawCashField;
     private JTextField textField;
     
     private JPanel loginscreen1;
@@ -58,12 +59,16 @@ public class ATMGUI extends JFrame {
         this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM ID: " + atm.getATMID());
         this.setSize(700, 500);
 
+        this.depositCashField = makeCashField();
+        this.withdrawCashField = makeCashField();
         this.sidebar = makeSidebar();
         this.homescreen = makeHomeScreen();
         this.loginscreen1 = makeLoginScreen1();
         this.loginscreen2 = makeLoginScreen2();
         this.depositscreen = makeTransactionScreen("Enter an amount to deposit:");
+        this.depositscreen.add(depositCashField);
         this.withdrawscreen = makeTransactionScreen("Enter an amount to withdraw:");
+        this.withdrawscreen.add(withdrawCashField);
         this.depositokscreen = makeResultScreen("Deposit successful.");
         this.withdrawokscreen = makeResultScreen("Withdraw sucessful.");
         this.withdrawfailscreen = makeResultScreen("Withdraw failed. Insufficient funds.");
@@ -110,7 +115,7 @@ public class ATMGUI extends JFrame {
                 
             case SCR_DEPOSIT:
                 add(depositscreen, BorderLayout.WEST);
-                cashField.setText("$0.00");
+                depositCashField.setText("$0.00");
                 valuestr = "";
                 break;
                 
@@ -132,6 +137,8 @@ public class ATMGUI extends JFrame {
                 
             case SCR_WITHDRAW:
                 add(withdrawscreen, BorderLayout.WEST);
+                withdrawCashField.setText("$0.00");
+                valuestr = "";
                 break;
                 
             default:
@@ -274,11 +281,20 @@ public class ATMGUI extends JFrame {
                 }
                 break;
             case SCR_WITHDRAW:
-            case SCR_DEPOSIT:
+                // user cannot enter leading zeros
                 if (valuestr.length() == 0 && b.getText().equals("0"))
                     break;
                 valuestr += b.getText();
-                cashField.setText(ATM.formatCash(valuestr));
+                withdrawCashField.setText(ATM.formatCash(valuestr));
+                render();
+                break;
+            case SCR_DEPOSIT:
+                // user cannot enter leading zeros
+                if (valuestr.length() == 0 && b.getText().equals("0"))
+                    break;
+                valuestr += b.getText();
+                depositCashField.setText(ATM.formatCash(valuestr));
+                render();
                 break;
             }
         };
@@ -343,33 +359,36 @@ public class ATMGUI extends JFrame {
             switch (activeWindow) {
             case SCR_LOGIN_1:
                 textField.setText("");
+                break;
             case SCR_LOGIN_2:
                 passwordField.setText("");
                 break;
             case SCR_WITHDRAW:
-            case SCR_DEPOSIT:
-                cashField.setText("$0.00");
+                withdrawCashField.setText("$0.00");
                 valuestr = "";
+                break;
+            case SCR_DEPOSIT:
+                depositCashField.setText("$0.00");
+                valuestr = "";
+                break;
             }
         });
         
-        buttclose.addActionListener( e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSED)));
+        buttclose.addActionListener( e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
         
         return sb;
     }
     
     private JPanel makeTransactionScreen(String msg) {
         JPanel ds = new JPanel();
-        ds.setPreferredSize(new Dimension(450,500));
+        ds.setPreferredSize(new Dimension(450, 500));
         ds.setBorder(BORDER_SCREEN);
         ds.setLayout(new FlowLayout());
 
         JLabel lmsg = new JLabel(msg);
         lmsg.setPreferredSize(new Dimension(430, 70));
         lmsg.setFont(new Font("sans-serif", 0, 30));
-        cashField = makeCashField();
         ds.add(lmsg);
-        ds.add(cashField);
         return ds;
     }
     
