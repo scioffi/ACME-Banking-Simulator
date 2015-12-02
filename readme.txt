@@ -31,9 +31,10 @@ separating the UI "view" code from the back-end game "model".
 	two seperate panels at a time - one being the sidebar with the buttons,
 	and the other being a different panel to adjust to the current operation.
 	
-	The GUI objects listen to the model using an Observer/Observable pattern, ensuring that model
-	updates are passed up the ladder to the GUI. For example, the ATM GUI displays information from an ATM model,
-	which listens to a logged-in account.
+	The GUI objects listen to the model using an Observer/Observable pattern,
+	ensuring that model updates are passed up the ladder to the GUI. For example,
+	the ATM GUI displays information from an ATM model, which listens to a
+	logged-in account.
 
 3. Implementation and Testing
 -------------------
