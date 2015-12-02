@@ -79,7 +79,7 @@ public class Bank extends Observable implements Observer {
             case "o":   // open account
                 batchOpenAccount(words);
                 break;
-            case "c":   // close account
+            case "c":   // logout account
                 batchCloseAccount(words);
                 break;
             case "d":   // deposit to account
@@ -252,9 +252,8 @@ public class Bank extends Observable implements Observer {
         Scanner sc = null;
         try {
             sc = new Scanner(new FileReader(fname));
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                lines.add(line);
+            while (sc.hasNextLine()) {  // read in each line and add it to the list
+                lines.add(sc.nextLine());
             }
         } catch (FileNotFoundException | NoSuchElementException | IllegalStateException e) {
             return null;

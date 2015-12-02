@@ -1,8 +1,5 @@
-/**
- *  BankGUI.java
- *
- *  @author Stephen Cioffi scc3459
- *  @author Michael Incardona mji8299
+/*
+ * BankGUI.java
  */
 
 import javax.swing.*;
@@ -20,13 +17,18 @@ import java.util.Observer;
  */
 public class BankGUI extends JFrame implements Observer {
     
+    /** The underlying bank model. */
     private Bank bank;
 
+    /** Scrolling text pane that displays account info. */
     private JTextArea text;
     private JScrollPane listScrollPane;
     
+    /** Panel which holds the buttons. */
     private JPanel panelOfButtons;
+    /** Button to open an ATM. */
     private JButton btnATM;
+    /** Button to force an account update. */
     private JButton btnUpdate;
 
     /**
@@ -37,12 +39,13 @@ public class BankGUI extends JFrame implements Observer {
         this.bank = bank;
         bank.addObserver(this);
         
-        this.setSize(640, 360);     // same size as a windows command prompt
+        this.setSize(640, 360);     // easter egg: same size as a windows command prompt
         this.setLocationRelativeTo(null);   // center the window
         
+        // add account info area
         text = new JTextArea();
         text.setLineWrap(false);
-        text.setEditable(false); // Prevent textfield from being editable by users.
+        text.setEditable(false); // Prevent textfield from being editable by users
         
         listScrollPane = new JScrollPane(text);
         this.getContentPane().add(listScrollPane, BorderLayout.CENTER);
@@ -63,13 +66,13 @@ public class BankGUI extends JFrame implements Observer {
         
         this.update(null, null);
         
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE); // Close the frame and temrinate the thread on close.
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE); // Close the frame and temrinate the thread on logout.
         
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                bank.printSummary();
-                bank.save(); // Flush data to disk.
+                bank.printSummary();    // print a summary of the current account status
+                bank.save();    // save the account data to the bank file
                 super.windowClosing(e);
             }
         });
@@ -96,16 +99,11 @@ public class BankGUI extends JFrame implements Observer {
         StringBuilder sb = new StringBuilder();
         ArrayList<Account> accts = bank.getAccounts(); // List of accounts
         for (Account acct : accts) {
-            sb.append(acct.toString()).append('\n');
+            sb.append(acct.toString()).append('\n');    // prints each account's info on a new line
         }
         text.setText(sb.toString());
     }
 
-    /**
-     * When a change is observed, update the GUI.
-     * @param o
-     * @param arg
-     */
     @Override
     public void update(Observable o, Object arg) {
         refresh();

@@ -3,6 +3,7 @@
  */
 
 /**
+ * A savings account.
  * @author Michael Incardona mji8299
  * @author Steven Cioffi scc3459
  */

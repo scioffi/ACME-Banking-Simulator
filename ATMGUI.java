@@ -1,8 +1,5 @@
-/**
- *  BankGUI.java
- *
- *  @author Stephen Cioffi scc3459
- *  @author Michael Incardona mji8299
+/*
+ * BankGUI.java
  */
 
 import javax.swing.*;
@@ -21,8 +18,8 @@ import java.awt.event.WindowEvent;
 public class ATMGUI extends JFrame {
 
     /** Identifier contants for the various atm screens. */
-    private static final String SCR_LOGIN_1 = "login1";
-    private static final String SCR_LOGIN_2 = "login2";
+    private static final String SCR_LOGIN_ID = "login1";
+    private static final String SCR_LOGIN_PASSWORD = "login2";
     private static final String SCR_DEPOSIT = "deposit";
     private static final String SCR_HOME = "home";
     private static final String SCR_BALANCE = "balance";
@@ -68,6 +65,7 @@ public class ATMGUI extends JFrame {
         this.setTitle("Stephen Cioffi (scc3459) & Michael Incardona (mji8299) | ATM ID: " + atm.getATMID());
         this.setSize(700, 500);
 
+        // create input fields and screens
         this.depositCashField = makeCashField();
         depositCashField.setFocusable(false);
         this.withdrawCashField = makeCashField();
@@ -77,9 +75,8 @@ public class ATMGUI extends JFrame {
         this.homescreen_CD = makeHomeScreen(false);
         this.loginscreen1 = makeLoginScreen1();
         this.loginscreen2 = makeLoginScreen2();
-        this.depositscreen = makeTransactionScreen("Enter an amount to deposit:");
-        this.depositscreen.add(depositCashField);
-        this.withdrawscreen = makeTransactionScreen("Enter an amount to withdraw:");
+        this.depositscreen = makeTransactionScreen("Enter an amount to deposit:", depositCashField);
+        this.withdrawscreen = makeTransactionScreen("Enter an amount to withdraw:", withdrawCashField);
         this.withdrawscreen.add(withdrawCashField);
         this.depositokscreen = makeResultScreen("Deposit successful.");
         this.withdrawokscreen = makeResultScreen("Withdraw sucessful.");
@@ -89,16 +86,20 @@ public class ATMGUI extends JFrame {
         
         this.setLayout(flow);
         
+        // clean up before the window closes
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 atm.closeAll();
+                super.windowClosing(e);
             }
         });
         
-        setWindow(SCR_LOGIN_1);
+        // start on the ID login screen
+        setWindow(SCR_LOGIN_ID);
+        // use dispose instead of close, or the entire process will die
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);   // center the window on the screen
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
@@ -109,19 +110,22 @@ public class ATMGUI extends JFrame {
      * @param window Identifier of the new window
      */
     private void setWindow(String window) {
-        removeAllComponents();
+        // clear all components in the atm frame
+        getContentPane().removeAll();
+        // add the newly selected window to the left section
         switch (window) {
-            case SCR_LOGIN_1:
+            case SCR_LOGIN_ID:
                 add(loginscreen1, BorderLayout.WEST);
                 textField.setText("");
                 break;
                 
-            case SCR_LOGIN_2:
+            case SCR_LOGIN_PASSWORD:
                 add(loginscreen2, BorderLayout.WEST);
                 passwordField.setText("");
                 break;
                 
             case SCR_HOME:
+                // if a CD account is loaded, use the greyed-out withdraw option
                 if (atm.canWithdraw()) {
                     add(homescreen, BorderLayout.WEST);
                 } else {
@@ -161,22 +165,18 @@ public class ATMGUI extends JFrame {
                 setWindow(activeWindow);
                 return;
         }
+        // add back the sidebar
         add(sidebar, BorderLayout.EAST);
+        // change the window cariabel and redraw the GUI
         activeWindow = window;
         render();
-    }
-
-    /**
-     * Removes all components from this frame 
-     */
-    private void removeAllComponents() {
-        getContentPane().removeAll();
     }
 
     /**
      * Redraws the GUI so that all components appear updated.
      */
     private void render() {
+        // validate orders the layouts, repaint redraws everything
         validate();
         repaint();
     }
@@ -219,6 +219,11 @@ public class ATMGUI extends JFrame {
         return ls;
     }
 
+    /**
+     * Creates a home screen with balance, deposit, withdraw, and logout options.
+     * @param isWithdrawPossible if false, then the withdraw option will be colored grey (unusable) instead of black
+     * @return The newly created home screen
+     */
     private JPanel makeHomeScreen(boolean isWithdrawPossible) {
         JPanel hs = new JPanel();
         hs.setPreferredSize(new Dimension(450, 500));
@@ -234,13 +239,13 @@ public class ATMGUI extends JFrame {
         l3.setFont(labelFont);
         
         if (!isWithdrawPossible) {
-            l3.setForeground(Color.LIGHT_GRAY);
+            l3.setForeground(Color.LIGHT_GRAY);     // grey out the withdraw option if using a CD account
         }
         
         JLabel l4 = new JLabel("4) Log Off");
         l4.setFont(labelFont);
         
-        hs.setLayout(new BoxLayout(hs, BoxLayout.Y_AXIS));
+        hs.setLayout(new BoxLayout(hs, BoxLayout.Y_AXIS));  // order all labels in a column
         
         hs.add(l1);
         hs.add(l2);
@@ -249,23 +254,40 @@ public class ATMGUI extends JFrame {
         
         return hs;
     }
-    
+
+    /**
+     * Creates the sidebar with 0-9, OK, Cancel, Clear, and Close buttons.
+     * @return The newly created sidebar
+     */
     private JPanel makeSidebar() {
+        // store all the number buttons in an array, instead of ten local variables
         JButton[] numberBtns = new JButton[10];
         JPanel sb = new JPanel();
         sb.setPreferredSize(new Dimension(250, 500));
 
-        GridLayout grid = new GridLayout(5, 3);
+        GridLayout grid = new GridLayout(5, 3);     // layout all buttons in a grid
         sb.setLayout(grid);
 
         for (int i = 0; i < 10; i++) {
-            numberBtns[i] = new JButton(Integer.toString(i));
+            numberBtns[i] = new JButton(Integer.toString(i));   // create number buttons
         }
         
         JButton buttok = new JButton("OK");
         JButton buttcancel = new JButton("Cancel");
         JButton buttclear = new JButton("Clear");
         JButton buttclose = new JButton("Close");
+
+        // set the font on all the buttons
+        Font numberFont = new Font("sans-serif", Font.BOLD, 50);
+
+        for (int i = 0; i < 10; i++) {
+            numberBtns[i].setFont(numberFont);
+        }
+
+        buttok.setFont(new Font("sans-serif", Font.BOLD, 30));
+        buttcancel.setFont(new Font("sans-serif", Font.BOLD, 14));
+        buttclear.setFont(new Font("sans-serif", Font.BOLD, 16));
+        buttclose.setFont(new Font("sans-serif", Font.BOLD, 16));
         
         for (int i = 1; i < 10; i++) {
             sb.add(numberBtns[i]);
@@ -275,32 +297,25 @@ public class ATMGUI extends JFrame {
         sb.add(numberBtns[0]);
         sb.add(buttcancel);
         sb.add(buttclear);
-        sb.add(new JPanel());
+        sb.add(new JPanel());   // dummy panel to fill space
         sb.add(buttclose);
-        
-        Font numberFont = new Font("sans-serif", Font.BOLD, 50);
-        
-        for (int i = 0; i < 10; i++) {
-            numberBtns[i].setFont(numberFont);
-        }
-        
-        buttok.setFont(new Font("sans-serif", Font.BOLD, 30));
-        buttcancel.setFont(new Font("sans-serif", Font.BOLD, 14));
-        buttclear.setFont(new Font("sans-serif", Font.BOLD, 16));
-        buttclose.setFont(new Font("sans-serif", Font.BOLD, 16));
-        
+
+        /**
+         * Carries out the function of the number buttons on each screen.
+         * This same event listener is used for every number button.
+         */
         ActionListener numbers = e -> {
             JButton b = (JButton) e.getSource();
             switch(activeWindow) {
-            case SCR_LOGIN_1:
-                textField.setText(textField.getText() + b.getText());
+            case SCR_LOGIN_ID:
+                textField.setText(textField.getText() + b.getText());   // concatenate the number to the id field
                 break;
-            case SCR_LOGIN_2:
-                String s = new String(passwordField.getPassword());
+            case SCR_LOGIN_PASSWORD:
+                String s = new String(passwordField.getPassword());     // concatenate the number to the password field
                 passwordField.setText(s + b.getText());
                 break;
-            case SCR_HOME:
-                switch (b.getText()) {
+            case SCR_HOME:                  // use the number buttons to select options on the home screen
+                switch (b.getText()) {      // perform the operation specified by the user
                 case "1":
                     setWindow(SCR_BALANCE);
                     break;
@@ -308,13 +323,13 @@ public class ATMGUI extends JFrame {
                     setWindow(SCR_DEPOSIT);
                     break;
                 case "3":
-                    if (atm.canWithdraw()) {
+                    if (atm.canWithdraw()) {    // only activte the withdraw screen if the account supports withdrawals
                         setWindow(SCR_WITHDRAW);
                     }
                     break;
                 case "4":
-                    atm.close();
-                    setWindow(SCR_LOGIN_1);
+                    atm.logout();    // logout and go back to the ID entry login screen
+                    setWindow(SCR_LOGIN_ID);
                     break;
                 }
                 break;
@@ -337,37 +352,42 @@ public class ATMGUI extends JFrame {
             }
         };
 
+        // add the event listener to the number buttons
         for (int i = 0; i < 10; i++) {
             numberBtns[i].addActionListener(numbers);
         }
 
+        /**
+         * Carries out the function of the ok button on each screen.
+         */
         buttok.addActionListener(e -> {
             switch (activeWindow) {
-            case SCR_LOGIN_1:
-                if (atm.validateID(textField.getText())) {
-                    setWindow(SCR_LOGIN_2);
+            case SCR_LOGIN_ID:
+                if (atm.validateID(textField.getText())) {  // try to validate the ID entered by the user
+                    setWindow(SCR_LOGIN_PASSWORD);
                 }
                 else{
                     textField.setText("");
                 }
                 break;
-            case SCR_LOGIN_2:
+            case SCR_LOGIN_PASSWORD:    // try to validate the password entered by the user
+                // if the password is correct, login and go to the home screen
                 if (atm.validatePIN(new String(passwordField.getPassword()))) {
                     setWindow(SCR_HOME);
                 } else {
-                    setWindow(SCR_LOGIN_1);
+                    setWindow(SCR_LOGIN_ID);
                 }
                 break;
-            case SCR_DEPOSIT:
+            case SCR_DEPOSIT:   // perform a deposit
                 double depcash = Double.parseDouble(ATM.digitsToCash(valuestr));
                 if (atm.deposit(depcash)) {
                     valuestr = "";
-                    setWindow(SCR_DEPOSIT_OK);
+                    setWindow(SCR_DEPOSIT_OK);  // go to the confirmation screen after deposit
                 }
                 break;
             case SCR_WITHDRAW:
                 double withcash = Double.parseDouble(ATM.digitsToCash(valuestr));
-                if (atm.withdraw(withcash)) {
+                if (atm.withdraw(withcash)) {   // go to either the confirm or error screen after withdraw
                     valuestr = "";
                     setWindow(SCR_WITHDRAW_OK);
                 } else {
@@ -379,29 +399,35 @@ public class ATMGUI extends JFrame {
             case SCR_BALANCE:
             case SCR_WITHDRAW_OK:
             case SCR_WITHDRAW_FAIL:
-                setWindow(SCR_HOME);
+                setWindow(SCR_HOME);    // return to the home screen after the notification
                 break;
             }
         });
-        
+
+        /**
+         * Carries out the function of the cancel button on each screen.
+         */
         buttcancel.addActionListener(e -> {
             switch (activeWindow) {
-            case SCR_LOGIN_2:
-                setWindow(SCR_LOGIN_1);
+            case SCR_LOGIN_PASSWORD:
+                setWindow(SCR_LOGIN_ID);    // go back to ID entry screen
                 break;
             case SCR_WITHDRAW:
             case SCR_DEPOSIT:
-                setWindow(SCR_HOME);
+                setWindow(SCR_HOME);        // cancel transaction and go to the home screen
                 break;
             }
         });
-        
+
+        /**
+         * Carries out the function of the clear button on each screen.
+         */
         buttclear.addActionListener(e -> {
-            switch (activeWindow) {
-            case SCR_LOGIN_1:
+            switch (activeWindow) {     // clear the text entry field
+            case SCR_LOGIN_ID:
                 textField.setText("");
                 break;
-            case SCR_LOGIN_2:
+            case SCR_LOGIN_PASSWORD:
                 passwordField.setText("");
                 break;
             case SCR_WITHDRAW:
@@ -415,12 +441,19 @@ public class ATMGUI extends JFrame {
             }
         });
         
-        buttclose.addActionListener( e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
+        // set the logout button to trigger a window closing event
+        buttclose.addActionListener(e -> this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
         
         return sb;
     }
-    
-    private JPanel makeTransactionScreen(String msg) {
+
+    /**
+     * Creates a deposit/withdraw screen with a label and cash field.
+     * @param msg The message to display
+     * @param cash The cash entry field to display
+     * @return The newly screated transaction screen
+     */
+    private JPanel makeTransactionScreen(String msg, JTextField cash) {
         JPanel ds = new JPanel();
         ds.setPreferredSize(new Dimension(450, 500));
         ds.setBorder(BORDER_SCREEN);
@@ -429,10 +462,15 @@ public class ATMGUI extends JFrame {
         JLabel lmsg = new JLabel(msg);
         lmsg.setPreferredSize(new Dimension(430, 70));
         lmsg.setFont(new Font("sans-serif", 0, 30));
-        ds.add(lmsg);
+        ds.add(lmsg);   // add the message label
+        ds.add(cash);   // add the cash entry field
         return ds;
     }
-    
+
+    /**
+     * Creates a cash entry text field.
+     * @return A newly created cash entry field
+     */
     private JTextField makeCashField() {
         JTextField f = new JTextField();
         f.setEditable(false);
@@ -443,7 +481,11 @@ public class ATMGUI extends JFrame {
         f.setText("$0.00");
         return f;
     }
-    
+
+    /**
+     * Creates an account ID entry text field.
+     * @return A newly created account ID field
+     */
     private JTextField makeIDField() {
         JTextField idf = new JTextField();
         idf.setHorizontalAlignment(JTextField.CENTER);
@@ -454,7 +496,11 @@ public class ATMGUI extends JFrame {
         idf.setFont(new Font("sans-serif", Font.BOLD, 30));
         return idf;
     }
-    
+
+    /**
+     * Creates an account password field that hides input.
+     * @return A newly created password field
+     */
     private JPasswordField makePasswordField() {
         // NOTE: for some reason, you need to add one to the JPasswordField arg to display all characters properly
         JPasswordField pass = new JPasswordField(7);
@@ -466,7 +512,11 @@ public class ATMGUI extends JFrame {
         pass.setFont(new Font("sans-serif", Font.BOLD, 30));
         return pass;
     }
-    
+
+    /**
+     * Creates a balance view field that shows the ATM's current account balance.
+     * @return A newly created balance screen
+     */
     private JPanel makeBalanceViewScreen() {
         JPanel bvs = new JPanel();
         bvs.setPreferredSize(new Dimension(450, 500));
@@ -487,7 +537,12 @@ public class ATMGUI extends JFrame {
         
         return bvs;
     }
-    
+
+    /**
+     * Creates a screen that displays a message.
+     * @param msg The message to display
+     * @return The newly created message screen.
+     */
     private JPanel makeResultScreen(String msg) {
         JPanel dcs = new JPanel();
         dcs.setPreferredSize(new Dimension(450, 500));
@@ -497,7 +552,7 @@ public class ATMGUI extends JFrame {
         
         JLabel lab = new JLabel(msg);
         lab.setPreferredSize(new Dimension(430, 70));
-        lab.setFont(new Font("sans-serif", 0, 30));
+        lab.setFont(new Font("sans-serif", 0, 24));
 
         dcs.add(lab);
 

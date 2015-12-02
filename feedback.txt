@@ -10,19 +10,20 @@ My account is: 	scc3459
 
 What did you learn by doing this assignment?
 
-	By doing this assignment, we learnt a lot more about
-	Java GUIs as well as working in a team on an assignment.
+	By doing this assignment, we learned a lot more about
+	Java GUIs as well as working in a team on a software project.
 
 
 What was easy about this assignment?
 
-	Creating account classes and having previous experience with GUIs.
+	Creating the account classes and having previous experience with GUIs.
 
 
 What was harder than you originally thought?
 
 	Organization and structure of the program were two elements harder
-	than we originally anticipated.
+	than we originally anticipated. We eventually used a "state machine" pattern for the ATM GUI, but we should
+	have incorporated object-oriented design into the pattern.
 
 
 What can the instructor do to improve this assignment?
@@ -38,4 +39,3 @@ What would you have liked to do in this assignment?
 What other issues would you like to discuss?
 
 	None at this time.
-

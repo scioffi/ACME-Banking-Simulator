@@ -11,15 +11,27 @@ import java.util.Observer;
  * @author Steven Cioffi scc3459
  */
 public class ATM extends Observable implements Observer {
+    /** The account currently accessed by this ATM. */
     private Account account;
+    /** The bank this ATM is tied to. */
     private Bank bank;
+    /** Unique ATM ID. */
     private long id;
 
+    /**
+     * Creates a new ATM model.
+     * @param b The bank this ATM is tied to
+     * @param ATMID The unique ID of this ATM
+     */
     public ATM(Bank b, long ATMID) {
         bank = b;
         id = ATMID;
     }
 
+    /**
+     * Gets the unique ID of this ATM.
+     * @return unique ATM ID
+     */
     public long getATMID() {
         return id;
     }
@@ -30,11 +42,11 @@ public class ATM extends Observable implements Observer {
      * @return Whether or not account ID exists.
      */
     public boolean validateID(String id) {
-        Account a = bank.getAccount(id); // Get account associated with ID.
+        Account a = bank.getAccount(id); // Get account associated with ID
         if (a == null) {
             return false;
         } else {
-            close(); // Close the ATM
+            logout(); // Close the ATM
             account = a;
             a.addObserver(this);
             return true;
@@ -54,17 +66,17 @@ public class ATM extends Observable implements Observer {
      * Remove all observers and terminate the ATM session.
      */
     public void closeAll() {
-        this.deleteObservers();
-        close(); // Close ATM
+        this.deleteObservers(); // clean up dangling references to clear the way for garbage collection
+        logout(); // Close ATM
     }
 
     /**
-     * Close window and delete instance of ATM.
+     * Logs out of the account in this ATM.
      */
-    public void close() {
+    public void logout() {
         if (account == null) // If account does not exist
             return;
-        account.deleteObserver(this);
+        account.deleteObserver(this);   // remove the account's reference to this ATM
         account = null;
     }
 
@@ -86,12 +98,13 @@ public class ATM extends Observable implements Observer {
     }
 
     /**
-     * Convert numerical value to a money syntax.
-     * @param numbers numerical value.
-     * @return Syntax.
+     * Convert numerical value to a money syntax (dollars and cents)
+     * @param numbers string of digits
+     * @return money string of the form "X.XX"
      */
     public static String digitsToCash(String numbers) {
         String temp = "";
+        // pas the numerical input to three digits
         if (numbers.length() == 0) { // If amount is $0.00
             temp = "0.00";
         } else if (numbers.length() == 1) { // If amount is $0.0x
@@ -109,7 +122,7 @@ public class ATM extends Observable implements Observer {
     /**
      * Deposit funds into the account.
      * @param cash Amount of money to deposit.
-     * @return boolean result of deposit success.
+     * @return true if deposit was successful
      */
     public boolean deposit(double cash) {
         return account.deposit(cash);
@@ -118,7 +131,7 @@ public class ATM extends Observable implements Observer {
     /**
      * Withdraw funds from the account.
      * @param cash Amount of money to withdraw.
-     * @return boolean result of withdraw success.
+     * @return true if withdraw was successful
      */
     public boolean withdraw(double cash) {
         if (canWithdraw()) {
@@ -128,7 +141,7 @@ public class ATM extends Observable implements Observer {
     }
 
     /**
-     * Determines whther this ATM's account supports withdrawals.
+     * Determines whether this ATM's account supports withdrawals.
      * @return true if withdrawals are allowed; false if they are not
      */
     public boolean canWithdraw() {

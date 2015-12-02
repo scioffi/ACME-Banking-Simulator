@@ -84,8 +84,8 @@ public abstract class Account extends Observable {
      * Both interest and penalties are applied based on the initial account balance.
      */
     public synchronized double applyCharges() {
-        double amt = getInterestRate() * this.getBalance();
-        if (this.getBalance() < getMinimumBalance())
+        double amt = getInterestRate() * this.getBalance(); // calculate interest
+        if (this.getBalance() < getMinimumBalance())    // apply monthly penalty if balance is too low
             amt -= getMonthlyPenalty();
         setBalance(getBalance() + amt);
         triggerUpdate();
@@ -140,7 +140,7 @@ public abstract class Account extends Observable {
      * @return true if the deposit succeeded; false otherwise
      */
     public synchronized boolean deposit(double amt) {
-        if (amt <= 0)
+        if (amt <= ZERO)       // cannot deposit a negative amount of money
             return false;
         this.setBalance(this.getBalance() + amt);
         triggerUpdate();
@@ -154,9 +154,9 @@ public abstract class Account extends Observable {
      * @return true if the PIN is well-formed; false otherwise
      */
     public static boolean isValidPIN(String n) {
-        if (n.length() != 4)
+        if (n.length() != 4)    // check that PIN is 4 characters
             return false;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {   // check that each character is a digit
             if (!Character.isDigit(n.charAt(i))) {
                 return false;
             }
@@ -171,9 +171,9 @@ public abstract class Account extends Observable {
      * @return true if the ID is well-formed; false otherwise
      */
     public static boolean isValidID(String n) {
-        if (n.length() < 4)
+        if (n.length() < 4)     // check that ID is at least 4 characters long
             return false;
-        for (int i = 0; i < n.length(); i++) {
+        for (int i = 0; i < n.length(); i++) {  // check that each character is a digit
             if (!Character.isDigit(n.charAt(i))) {
                 return false;
             }
@@ -211,7 +211,8 @@ public abstract class Account extends Observable {
     public abstract String toString();
 
     /**
-     * Gets the string representation of this account's type, padded with suffix whitespace to a minimum width.
+     * Gets the human-readable string representation of this account's type, 
+     * padded with suffix whitespace to a minimum width.
      * @param minlength the minimum width of the type
      * @return a string representing this account's type
      */
