@@ -1,37 +1,41 @@
 Feedback on the 4003-243 Project 2: 
 
-Course: 	_________________
+Course: 	    CSCI-140-03
 
-My name is: 	__________________
+My name is: 	Stephen Cioffi
+                Michael Incardona
 
-My account is: 	__________________
+My account is: 	scc3459
+                mji8299
 
 What did you learn by doing this assignment?
 
-	<ANSWER_HERE>
+	By doing this assignment, we learnt a lot more about
+	Java GUIs as well as working in a team on an assignment.
 
 
 What was easy about this assignment?
 
-	<ANSWER_HERE>
+	Creating account classes and having previous experience with GUIs.
 
 
 What was harder than you originally thought?
 
-	<ANSWER_HERE>
+	Organization and structure of the program were two elements harder
+	than we originally anticipated.
 
 
 What can the instructor do to improve this assignment?
 
-	<ANSWER_HERE>
+	Go over GUIs more and go more in depth than what we did.
 
 
 What would you have liked to do in this assignment?
 
-	<ANSWER_HERE>
+	Add keyboard shortcuts and make the buttons beep like a real ATM.
 
 
 What other issues would you like to discuss?
 
-	<ANSWER_HERE>
+	None at this time.
 

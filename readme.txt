@@ -6,7 +6,7 @@
 ---------------------
 
 CS Username: 	scc3459 	Name:  		Stephen Cioffi
-   Username:  mji8299   Name:     Michael Incardona
+   Username:    mji8299     Name:       Michael Incardona
 
 1. Problem Analysis
 ---------
@@ -27,7 +27,12 @@ components? What connects to what? How much time did you spend on design?
 Make sure to clearly show how your design uses the MVC model by
 separating the UI "view" code from the back-end game "model".
 
-	<ANSWER_HERE>
+	When we created our design, we immedietly came up with the idea to use
+	to seperate panels at a time. One being the sidebar with the buttons
+	and the other being a different panel every window to adjust to that
+	window's needs.
+
+	$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 3. Implementation and Testing
 -------------------
@@ -45,7 +50,12 @@ How could you improve it?
 How much total time would you estimate you worked on the project? 
 If you had to do this again, what would you do differently?
 
-	<ANSWER_HERE>
+	At first, as a team, we divided the work into backend/batch and frontend GUI.
+	To test our program, we developed our test cases to try every time we made a change.
+	At the end, our solution does all it is supposed to do and then some. If we were to
+	do this project differently, we would probably make the individual screens display objects.
+	The only improvement we really could make to make it more like a real ATM would be to
+	have sounds when you click a button.
 
 4. Development Process
 -----------------------------
@@ -58,5 +68,10 @@ How many times did you have to go back to assess the problem?
 
 What did you learn about software development?
 
-	<ANSWER_HERE>
-
+	Before starting the coding, as a team, we spent around an hour in planning and
+	sketching ideas for the project, including class diagrams and pictures.
+	We did some design but not enough as we ran into some complications with the
+	ATM GUI along the way. We would go back and assess the problem anytime we
+	were confused about something and wanted to check again to make sure. In software
+	development, we learned to work as a team and work with team versioning tools
+	such as Git.
