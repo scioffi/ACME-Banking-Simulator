@@ -13,8 +13,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * A graphical ATM interface which sita on top of an underlying ATM model.
+ * @author Michael incardona mji8299
+ * @author Steven Cioffi scc3459
+ */
 public class ATMGUI extends JFrame {
-    
+
+    /** Identifier contants for the various atm screens. */
     private static final String SCR_LOGIN_1 = "login1";
     private static final String SCR_LOGIN_2 = "login2";
     private static final String SCR_DEPOSIT = "deposit";
@@ -25,13 +31,15 @@ public class ATMGUI extends JFrame {
     private static final String SCR_WITHDRAW_OK = "withdraw_ok";
     private static final String SCR_WITHDRAW_FAIL = "withdraw_fail";
     
-    private static final Border BORDER_SUNKEN = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
-    private static final Border BORDER_SCREEN = BORDER_SUNKEN;
+    /** The border which surrounds the ATM screens */
+    private static final Border BORDER_SCREEN = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
     
-    private String activeWindow = SCR_LOGIN_1;
+    /** The currently active ATM screen. */
+    private String activeWindow;
+    /** The underlying ATM model. */
     private final ATM atm;
-    private JLabel mainlabel;
     
+    /** Text fields used in atm input. */
     private JPasswordField passwordField;
     private JTextField depositCashField;
     private JTextField withdrawCashField;
@@ -61,7 +69,9 @@ public class ATMGUI extends JFrame {
         this.setSize(700, 500);
 
         this.depositCashField = makeCashField();
+        depositCashField.setFocusable(false);
         this.withdrawCashField = makeCashField();
+        withdrawCashField.setFocusable(false);
         this.sidebar = makeSidebar();
         this.homescreen = makeHomeScreen(true);
         this.homescreen_CD = makeHomeScreen(false);
@@ -180,12 +190,13 @@ public class ATMGUI extends JFrame {
         ls.setPreferredSize(new Dimension(450, 500));
         ls.setBorder(BORDER_SCREEN);
 
-        mainlabel = new JLabel("Please enter your account ID:");
+        JLabel mainlabel = new JLabel("Please enter your account ID:");
         mainlabel.setPreferredSize(new Dimension(430, 70));
         mainlabel.setFont(new Font("sans-serif", Font.BOLD, 30));
         
         ls.add(mainlabel);
         ls.add(textField = makeIDField());
+        textField.setFocusable(false);
         return ls;
     }
 
@@ -198,12 +209,13 @@ public class ATMGUI extends JFrame {
         ls.setPreferredSize(new Dimension(450, 500));
         ls.setBorder(BORDER_SCREEN);
         
-        mainlabel = new JLabel("Please enter your PIN:");
+        JLabel mainlabel = new JLabel("Please enter your PIN:");
         mainlabel.setPreferredSize(new Dimension(430, 70));
         mainlabel.setFont(new Font("sans-serif", Font.BOLD, 30));
         
         ls.add(mainlabel);
         ls.add(passwordField = makePasswordField());
+        passwordField.setFocusable(false);
         return ls;
     }
 

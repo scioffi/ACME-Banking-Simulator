@@ -5,6 +5,11 @@
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * A model of an ATM which negotiates account operations.
+ * @author Michael incardona mji8299
+ * @author Steven Cioffi scc3459
+ */
 public class ATM extends Observable implements Observer {
     private Account account;
     private Bank bank;
@@ -137,7 +142,7 @@ public class ATM extends Observable implements Observer {
     public double balance() {
         return account.getBalance();
     }
-
+    
     @Override
     public void update(Observable o, Object arg) {
         triggerUpdate();
