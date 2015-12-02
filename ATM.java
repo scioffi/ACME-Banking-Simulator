@@ -25,11 +25,11 @@ public class ATM extends Observable implements Observer {
      * @return Whether or not account ID exists.
      */
     public boolean validateID(String id) {
-        Account a = bank.getAccount(id);
+        Account a = bank.getAccount(id); // Get account associated with ID.
         if (a == null) {
             return false;
         } else {
-            close();
+            close(); // Close the ATM
             account = a;
             a.addObserver(this);
             return true;
@@ -50,14 +50,14 @@ public class ATM extends Observable implements Observer {
      */
     public void closeAll() {
         this.deleteObservers();
-        close();
+        close(); // Close ATM
     }
 
     /**
      * Close window and delete instance of ATM.
      */
     public void close() {
-        if (account == null)
+        if (account == null) // If account does not exist
             return;
         account.deleteObserver(this);
         account = null;
@@ -67,7 +67,7 @@ public class ATM extends Observable implements Observer {
      * Update the ATM and notify observers.
      */
     private void triggerUpdate() {
-        this.setChanged();
+        this.setChanged(); // Update ATM
         this.notifyObservers();
     }
 
@@ -87,13 +87,13 @@ public class ATM extends Observable implements Observer {
      */
     public static String digitsToCash(String numbers) {
         String temp = "";
-        if (numbers.length() == 0) {
+        if (numbers.length() == 0) { // If amount is $0.00
             temp = "0.00";
-        } else if (numbers.length() == 1) {
+        } else if (numbers.length() == 1) { // If amount is $0.0x
             temp += "0.0" + numbers;
-        } else if(numbers.length() == 2) {
+        } else if(numbers.length() == 2) { // If amount is $0.xx
             temp += "0." + numbers;
-        } else {
+        } else { // Any amount greater than $0.99
             temp += numbers.substring(0, numbers.length()-2) + 
                     "." + 
                     numbers.substring(numbers.length()-2, numbers.length());
