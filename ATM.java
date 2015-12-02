@@ -116,12 +116,20 @@ public class ATM extends Observable implements Observer {
      * @return boolean result of withdraw success.
      */
     public boolean withdraw(double cash) {
-        if (account instanceof Withdrawable) {
+        if (canWithdraw()) {
             return ((Withdrawable)(account)).withdraw(cash);
         }
         return false;
     }
 
+    /**
+     * Determines whther this ATM's account supports withdrawals.
+     * @return true if withdrawals are allowed; false if they are not
+     */
+    public boolean canWithdraw() {
+        return (account instanceof Withdrawable);
+    }
+    
     /**
      * Return the balance of the account.
      * @return account balance.
