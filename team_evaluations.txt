@@ -15,10 +15,10 @@ Participation: how well did this person contribute to the team effort?
 [*] Contributed well	[ ] Contributed little	[ ] Did not contribute
 
 Additional comments:
-Enjoyed working with Mike. It was a good experience to work with a team
-on a programming project. It was also a great opprotunity to see how
-other programmers work and adapt from them.
-
+It was a lot fun working in a team to do the project. We both put in a
+large amount of effort into this project. We spent many hours in the
+SSE team rooms on a few weekends and met in the dorms to work on the
+project.
 
 
 
@@ -32,3 +32,6 @@ Participation: how well did this person contribute to the team effort?
 [*] Contributed well    [ ] Contributed little  [ ] Did not contribute
 
 Additional comments:
+Enjoyed working with Mike. It was a good experience to work with a team
+on a programming project. It was also a great opprotunity to see how
+other programmers work and adapt from them.
